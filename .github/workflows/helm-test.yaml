@@ -111,7 +111,7 @@ jobs:
 
       - name: Install just
         uses: extractions/setup-just@v1
-      - run: just helm-repo
+      - run: helm repo add cnpg https://cloudnative-pg.github.io/charts
 
       - name: Run chart-testing (list-changed)
         id: list-changed
