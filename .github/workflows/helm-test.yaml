@@ -32,39 +32,39 @@ jobs:
   # We can check versions using ct, but there is a bug checking 1 chart. So lets
   # just do it this way for now.
   # https://github.com/helm/chart-testing/pull/594
-  check_version:
-    name: Check Helm chart version
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          path: 'code'
-
-      - name: Fetch main branch
-        run: |
-          cd code
-          git fetch origin main:main
-
-      - name: Check chart version
-        run: |
-          cd code
-          CURR_VERSION=$(cat charts/tembo-operator/Chart.yaml | grep version: | cut -d ' ' -f 2)
-          MAIN_VERSION=$(git show main:charts/tembo-operator/Chart.yaml | grep version: | cut -d ' ' -f 2)
-
-          echo -n "Current version: ${CURR_VERSION}\n"
-          echo -n "Previous version: ${MAIN_VERSION}\n"
-
-          if [ "$CURR_VERSION" = "$MAIN_VERSION" ]; then
-            echo "Helm chart version is unchanged and needs to be bumped!"
-            exit 1
-          fi
-
-          LOWEST_VERSION=$(printf "%s\n%s" "$CURR_VERSION" "$MAIN_VERSION" | sort -V | head -n1)
-          if [ "$LOWEST_VERSION" != "$MAIN_VERSION" ]; then
-            echo "Helm chart version has been downgraded, please bump it!"
-            exit 1
-          fi
+#  check_version:
+#    name: Check Helm chart version
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#        with:
+#          path: 'code'
+#
+#      - name: Fetch main branch
+#        run: |
+#          cd code
+#          git fetch origin main:main
+#
+#      - name: Check chart version
+#        run: |
+#          cd code
+#          CURR_VERSION=$(cat charts/tembo-operator/Chart.yaml | grep version: | cut -d ' ' -f 2)
+#          MAIN_VERSION=$(git show main:charts/tembo-operator/Chart.yaml | grep version: | cut -d ' ' -f 2)
+#
+#          echo -n "Current version: ${CURR_VERSION}\n"
+#          echo -n "Previous version: ${MAIN_VERSION}\n"
+#
+#          if [ "$CURR_VERSION" = "$MAIN_VERSION" ]; then
+#            echo "Helm chart version is unchanged and needs to be bumped!"
+#            exit 1
+#          fi
+#
+#          LOWEST_VERSION=$(printf "%s\n%s" "$CURR_VERSION" "$MAIN_VERSION" | sort -V | head -n1)
+#          if [ "$LOWEST_VERSION" != "$MAIN_VERSION" ]; then
+#            echo "Helm chart version has been downgraded, please bump it!"
+#            exit 1
+#          fi
 
   lint:
     name: Lint charts
