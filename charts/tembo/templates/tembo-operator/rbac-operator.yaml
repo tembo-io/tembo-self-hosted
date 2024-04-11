@@ -1,0 +1,64 @@
+{{- if (index .Values "controller").enabled }}
+{{- if (index .Values "controller").rbac.create }}
+{{- $namespace := include "component.namespace" (list (list "controller" .Values .)) -}}
+{{- $fullname := include "controller.fullname" . -}}
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ $fullname }}
+  labels:
+{{ include "controller-helm.labels" . | indent 4 }}
+roleRef:
+  kind: ClusterRole
+  name: {{ $fullname }}
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: {{ $fullname }}
+  namespace: {{ $namespace }}
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ $fullname }}
+  labels:
+{{ include "controller-helm.labels" . | indent 4 }}
+rules:
+  - apiGroups: ["coredb.io"]
+    resources: ["coredbs", "coredbs/status"]
+    verbs: ["get", "list", "watch", "patch", "update"]
+  - apiGroups: ["events.k8s.io"]
+    resources: ["events"]
+    verbs: ["create"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "patch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["networkpolicies"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["endpoints", "services", "secrets", "pods", "pods/exec", "namespaces/status", "serviceaccounts", "secrets", "configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles", "rolebindings"]
+    verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+  - apiGroups: ["traefik.containo.us"]
+    resources: ["ingressroutetcps", "ingressroutes", "middlewares", "middlewaretcps"]
+    verbs: ["create", "get", "list", "patch", "update", "watch", "delete"]
+  - apiGroups: ["postgresql.cnpg.io"]
+    resources: ["clusters", "backups", "poolers", "scheduledbackups"]
+    verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+  - apiGroups: ["cert-manager.io"]
+    resources: ["certificates"]
+    verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["snapshot.storage.k8s.io"]
+    resources: ["volumesnapshots", "volumesnapshotcontents"]
+    verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+{{- end }}
+{{- end }}
