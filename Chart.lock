@@ -1,0 +1,9 @@
+dependencies:
+- name: tembo
+  repository: ""
+  version: 24.2.0
+- name: cloudnative-pg
+  repository: https://cloudnative-pg.github.io/charts
+  version: 0.20.1
+digest: sha256:0b9674195891ed014639d4e93c7b89b2420465cd8012be10cf5c5a371577d196
+generated: "2024-04-11T17:06:05.084001993-04:00"
