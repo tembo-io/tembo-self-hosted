@@ -1,5 +1,5 @@
-{{- if (index .Values "pod-init").enabled }}
-{{- $namespace := include "component.namespace" (list (list "pod-init" .Values .)) -}}
+{{- if (index .Values.temboOperator "pod-init").enabled }}
+{{- $namespace := include "component.namespace" (list (list "pod-init" .Values.temboOperator .)) -}}
 {{- $fullname := include "pod-init.fullname" . -}}
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
@@ -27,7 +27,7 @@ webhooks:
     admissionReviewVersions: ["v1"]
     namespaceSelector:
       matchLabels:
-        {{- toYaml (index (index .Values "pod-init") "namespaceSelector" "matchLabels") | nindent 8 }}
+        {{- toYaml (index (index .Values.temboOperator "pod-init") "namespaceSelector" "matchLabels") | nindent 8 }}
   - name: {{ printf "%s.%s.svc.cluster.local" $fullname $namespace }}
     clientConfig:
       service:
@@ -43,5 +43,5 @@ webhooks:
     admissionReviewVersions: ["v1"]
     namespaceSelector:
       matchLabels:
-        {{- toYaml (index (index .Values "pod-init") "namespaceSelector" "matchLabels") | nindent 8 }}
+        {{- toYaml (index (index .Values.temboOperator "pod-init") "namespaceSelector" "matchLabels") | nindent 8 }}
 {{- end }}

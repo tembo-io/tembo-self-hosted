@@ -1,5 +1,5 @@
-{{- if (index .Values "pod-init").enabled }}
-{{- $namespace := include "component.namespace" (list (list "pod-init" .Values .)) -}}
+{{- if (index .Values.temboOperator "pod-init").enabled }}
+{{- $namespace := include "component.namespace" (list (list "pod-init" .Values.temboOperator .)) -}}
 {{- $fullname := include "pod-init.fullname" . -}}
 apiVersion: cert-manager.io/v1
 kind: Issuer

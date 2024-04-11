@@ -1,6 +1,6 @@
-{{- if (index .Values "controller").enabled }}
-{{- if (index .Values "controller").rbac.create }}
-{{- $namespace := include "component.namespace" (list (list "controller" .Values .)) -}}
+{{- if (index .Values.temboOperator "controller").enabled }}
+{{- if (index .Values.temboOperator "controller").rbac.create }}
+{{- $namespace := include "component.namespace" (list (list "controller" .Values.temboOperator .)) -}}
 {{- $fullname := include "controller.fullname" . -}}
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1

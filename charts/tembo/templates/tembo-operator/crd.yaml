@@ -1,5 +1,5 @@
-{{- if (index .Values "controller").enabled }}
-{{- if (index .Values "controller").crds.create }}
+{{- if (index .Values.temboOperator "controller").enabled }}
+{{- if (index .Values.temboOperator "controller").crds.create }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:

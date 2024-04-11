@@ -1,6 +1,6 @@
-{{- if (index .Values "controller").enabled }}
-{{- if (index .Values "controller").monitoring.prometheusRule.enabled -}}
-{{- $namespace := include "component.namespace" (list (list "controller" .Values .)) -}}
+{{- if (index .Values.temboOperator "controller").enabled }}
+{{- if (index .Values.temboOperator "controller").monitoring.prometheusRule.enabled -}}
+{{- $namespace := include "component.namespace" (list (list "controller" .Values.temboOperator .)) -}}
 {{- $fullname := include "controller.fullname" . -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule

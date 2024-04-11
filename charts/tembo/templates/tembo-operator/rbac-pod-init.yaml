@@ -1,6 +1,6 @@
-{{- if (index .Values "pod-init").enabled }}
-{{- if (index .Values "pod-init").rbac.create }}
-{{- $namespace := include "component.namespace" (list (list "pod-init" .Values .)) -}}
+{{- if (index .Values.temboOperator "pod-init").enabled }}
+{{- if (index .Values.temboOperator "pod-init").rbac.create }}
+{{- $namespace := include "component.namespace" (list (list "pod-init" .Values.temboOperator .)) -}}
 {{- $fullname := include "pod-init.fullname" . -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

@@ -1,5 +1,5 @@
-{{- if (index .Values "controller").enabled }}
-{{- $namespace := include "component.namespace" (list (list "controller" .Values .)) -}}
+{{- if (index .Values.temboOperator "controller").enabled }}
+{{- $namespace := include "component.namespace" (list (list "controller" .Values.temboOperator .)) -}}
 {{- $fullname := include "controller.fullname" . -}}
 apiVersion: v1
 kind: ServiceAccount

@@ -1,5 +1,5 @@
-{{- if (index .Values "pod-init").enabled }}
-{{- $namespace := include "component.namespace" (list (list "pod-init" .Values .)) -}}
+{{- if (index .Values.temboOperator "pod-init").enabled }}
+{{- $namespace := include "component.namespace" (list (list "pod-init" .Values.temboOperator .)) -}}
 {{- $fullname := include "pod-init.fullname" . -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -8,13 +8,13 @@ metadata:
   namespace: {{ $namespace }}
   labels:
 {{ include "pod-init-helm.labels" . | nindent 4 }}
-  {{- if (index .Values "pod-init").annotations }}
-  annotations: {{ toYaml (index .Values "pod-init").annotations | nindent 4 }}
+  {{- if (index .Values.temboOperator "pod-init").annotations }}
+  annotations: {{ toYaml (index .Values.temboOperator "pod-init").annotations | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ default 1 (index .Values "pod-init").replicas }}
+  replicas: {{ default 1 (index .Values.temboOperator "pod-init").replicas }}
   strategy:
-    type: {{ (index .Values "pod-init").upgradeStrategy }}
+    type: {{ (index .Values.temboOperator "pod-init").upgradeStrategy }}
   selector:
     matchLabels:
       app: {{ $fullname }}
@@ -24,41 +24,41 @@ spec:
       labels:
 {{ include "pod-init-helm.labels" . | indent 8 }}
       annotations:
-        {{- if (index .Values "pod-init").podAnnotations }}
-        {{- range $key, $value := (index .Values "pod-init").podAnnotations }}
+        {{- if (index .Values.temboOperator "pod-init").podAnnotations }}
+        {{- range $key, $value := (index .Values.temboOperator "pod-init").podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
         {{- end }}
     spec:
       containers:
-        - image: {{ (index .Values "pod-init").image.repository }}:{{ (index .Values "pod-init").image.tag | toString }}
-          imagePullPolicy: {{ (index .Values "pod-init").image.pullPolicy }}
+        - image: {{ (index .Values.temboOperator "pod-init").image.repository }}:{{ (index .Values.temboOperator "pod-init").image.tag | toString }}
+          imagePullPolicy: {{ (index .Values.temboOperator "pod-init").image.pullPolicy }}
           name: pod-init
           env:
             - name: LOG_LEVEL
-              value: "{{ (index .Values "pod-init").logLevel}}"
+              value: "{{ (index .Values.temboOperator "pod-init").logLevel}}"
             - name: "TLS_CERT"
               value: /etc/tls/tls.crt
             - name: "TLS_KEY"
               value: /etc/tls/tls.key
-          {{- with (index .Values "pod-init").extraEnv }}
+          {{- with (index .Values.temboOperator "pod-init").extraEnv }}
             {{- range . }}
             - name: {{ .name }}
               value: {{ tpl (.value | quote) $ }}
             {{- end }}
           {{- end }}
-          {{- if (index .Values "pod-init").resources }}
+          {{- if (index .Values.temboOperator "pod-init").resources }}
           resources:
-            {{- toYaml (index .Values "pod-init").resources | nindent 12 }}
+            {{- toYaml (index .Values.temboOperator "pod-init").resources | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: 8443
               name: https
               protocol: TCP
           readinessProbe:
-          {{- toYaml (index .Values "pod-init").readinessProbe | nindent 12 }}
+          {{- toYaml (index .Values.temboOperator "pod-init").readinessProbe | nindent 12 }}
           livenessProbe:
-          {{- toYaml (index .Values "pod-init").livenessProbe | nindent 12 }}
+          {{- toYaml (index .Values.temboOperator "pod-init").livenessProbe | nindent 12 }}
           volumeMounts:
             - name: tls-certs
               mountPath: /etc/tls
@@ -74,14 +74,14 @@ spec:
                 path: tls.key
       serviceAccountName: {{ $fullname }}
       automountServiceAccountToken: true
-      {{- with (index .Values "pod-init").nodeSelector }}
+      {{- with (index .Values.temboOperator "pod-init").nodeSelector }}
       nodeSelector:
       {{ toYaml . | indent 2 }}
       {{- end }}
-      {{- with (index .Values "pod-init").tolerations }}
+      {{- with (index .Values.temboOperator "pod-init").tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with (index .Values "pod-init").affinity }}
+      {{- with (index .Values.temboOperator "pod-init").affinity }}
       affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}
