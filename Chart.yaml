@@ -1,0 +1,10 @@
+apiVersion: v2
+name: tembo
+version: 24.2.0
+appVersion: 1.0.0
+description: Helm chart to deploy the Tembo Platform
+keywords:
+  - tembo
+dependencies:
+  - name: tembo
+    version: 24.2.0
