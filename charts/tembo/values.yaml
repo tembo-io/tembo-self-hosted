@@ -57,7 +57,7 @@ conductor:
   affinity: {}
   env: {}
 
-temboOperator:
+tembo-operator:
   # -- The controller configuration
   controller:
     enabled: true

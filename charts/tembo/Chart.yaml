@@ -4,3 +4,11 @@ version: 24.2.0
 description: A Helm chart to deploy the Tembo platform
 keywords:
   - tembo
+dependencies:
+    - name: tembo-operator
+      version: 0.5.0
+      repository: https://tembo-io.github.io/tembo
+    - name: cloudnative-pg
+      version: 0.20.1
+      repository: https://cloudnative-pg.github.io/charts
+      condition: cloudnative-pg.enabled
