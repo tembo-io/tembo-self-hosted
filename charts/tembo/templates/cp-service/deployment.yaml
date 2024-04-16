@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cpService.fullname" . }}
+  labels:
+    {{- include "cpService.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.cpService.replicas }}
+  selector:
+    matchLabels:
+      {{- include "cpService.selectorLabels" . | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      {{- with .Values.cpService.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cpService.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.cpService.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cpService.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.cpService.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          command:
+          - /usr/local/bin/cp-service
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+          - name: PG_CONN_URL
+            valueFrom:
+              secretKeyRef:
+                name: data-plane
+                key: _data-plane_postgres_connection_string
+          - name: cpService_ENABLED
+            value: "true"
+          - name: RUST_LOG
+            value: {{ .Values.cpService.logLevel }}
+          {{- if .Values.cpService.env }}{{ .Values.cpService.env | default list | toYaml | nindent 10 }}{{- end }}
+          securityContext:
+            {{- toYaml .Values.cpService.securityContext | nindent 12 }}
+          image: "{{ .Values.cpService.image.repository }}:{{ .Values.cpService.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.cpService.image.pullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: "/health/lively"
+              port: http
+          readinessProbe:
+            httpGet:
+              path: "/health/lively"
+              port: http
+          resources:
+            {{- toYaml .Values.cpService.resources | nindent 12 }}
+      {{- with .Values.cpService.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.cpService.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.cpService.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
