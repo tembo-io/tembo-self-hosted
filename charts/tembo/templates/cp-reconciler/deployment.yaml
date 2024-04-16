@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cpReconciler.fullname" . }}
+  labels:
+    {{- include "cpReconciler.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.cpReconciler.replicas }}
+  selector:
+    matchLabels:
+      {{- include "cpReconciler.selectorLabels" . | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      {{- with .Values.cpReconciler.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cpReconciler.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.cpReconciler.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cpReconciler.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.cpReconciler.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          command:
+          - /usr/local/bin/cp-service
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+          - name: PG_CONN_URL
+            valueFrom:
+              secretKeyRef:
+                name: data-plane
+                key: _data-plane_postgres_connection_string
+          - name: cpReconciler_ENABLED
+            value: "true"
+          - name: RUST_LOG
+            value: {{ .Values.cpReconciler.logLevel }}
+          {{- if .Values.cpReconciler.env }}{{ .Values.cpReconciler.env | default list | toYaml | nindent 10 }}{{- end }}
+          securityContext:
+            {{- toYaml .Values.cpReconciler.securityContext | nindent 12 }}
+          image: "{{ .Values.cpReconciler.image.repository }}:{{ .Values.cpReconciler.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.cpReconciler.image.pullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: "/health/lively"
+              port: http
+          readinessProbe:
+            httpGet:
+              path: "/health/lively"
+              port: http
+          resources:
+            {{- toYaml .Values.cpReconciler.resources | nindent 12 }}
+      {{- with .Values.cpReconciler.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.cpReconciler.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.cpReconciler.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
