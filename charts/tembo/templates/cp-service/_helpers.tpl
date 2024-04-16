@@ -50,21 +50,6 @@ app.kubernetes.io/name: {{ include "cpService.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{- define "cpService.watcherSelectorLabels" -}}
-app.kubernetes.io/name: {{ include "cpService.name" . }}-watcher
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{- define "cpService.watcherLabels" -}}
-helm.sh/chart: {{ include "cpService.chart" . }}
-{{ include "cpService.watcherSelectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-
 {{/*
 Create the name of the service account to use
 */}}

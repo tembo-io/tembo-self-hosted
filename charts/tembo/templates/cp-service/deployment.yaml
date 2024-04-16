@@ -46,8 +46,6 @@ spec:
                 key: _data-plane_postgres_connection_string
           - name: cpService_ENABLED
             value: "true"
-          - name: WATCHER_ENABLED
-            value: "false"
           - name: RUST_LOG
             value: {{ .Values.cpService.logLevel }}
           {{- if .Values.cpService.env }}{{ .Values.cpService.env | default list | toYaml | nindent 10 }}{{- end }}
