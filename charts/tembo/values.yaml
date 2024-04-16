@@ -361,3 +361,66 @@ cpWebserver:
   tolerations: []
   affinity: {}
   env: {}
+
+cpReconciler:
+  logLevel: info
+
+  replicas: 1
+
+  podMonitor:
+    enabled: false
+    port: http
+    path: /metrics
+
+  externalSecrets:
+    refreshInterval: "5m"
+    parameterStore:
+      name: "secret-store-parameter-store"
+      kind: ClusterSecretStore
+    secretName: ~
+    secretRegex: ~
+
+  serviceMonitors:
+    coredb:
+      enabled: false
+
+  image:
+    repository: quay.io/coredb/cp-service
+    tag: 27b3eb9
+    pullPolicy: IfNotPresent
+
+  # We should reconfigure the defaults
+  # once we have more information about this
+  # workload in practice.
+  resources:
+    limits:
+      cpu: 1
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  serviceAccount:
+    annotations: {}
+    # Defaults to match name of deployment,
+    # when this is set to empty string.
+    name: ""
+
+  imagePullSecrets: []
+  nameOverride: cp-reconciler
+  fullnameOverride: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  env:
+    - name: SERVICE_NAME
+      value: cp-reconciler
+    - name: RECONCILE_INTERVAL_SEC
+      value: '120'
+    - name: RUN_RECONCILE
+      value: 'true'
+    - name: RUN_REPORTER
+      value: 'false'
