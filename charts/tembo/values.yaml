@@ -25,8 +25,8 @@ conductor:
       enabled: false
 
   image:
-    repository: quay.io/coredb/conductor
-    tag: "latest"
+    repository: quay.io/tembo/conductor
+    tag: 0.1.0
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -251,3 +251,58 @@ tembo-operator:
       podMonitorEnabled: false
     service:
       type: ClusterIP
+
+cpService:
+  logLevel: info
+
+  replicas: 1
+
+  podMonitor:
+    enabled: false
+    port: http
+    path: /metrics
+
+  externalSecrets:
+    refreshInterval: "5m"
+    parameterStore:
+      name: "secret-store-parameter-store"
+      kind: ClusterSecretStore
+    secretName: ~
+    secretRegex: ~
+
+  serviceMonitors:
+    coredb:
+      enabled: false
+
+  image:
+    repository: quay.io/coredb/cp-service
+    tag: 27b3eb9
+    pullPolicy: IfNotPresent
+
+  # We should reconfigure the defaults
+  # once we have more information about this
+  # workload in practice.
+  resources:
+    limits:
+      cpu: 1
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  serviceAccount:
+    annotations: {}
+    # Defaults to match name of deployment,
+    # when this is set to empty string.
+    name: ""
+
+  imagePullSecrets: []
+  nameOverride: cp-service
+  fullnameOverride: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  env: {}
