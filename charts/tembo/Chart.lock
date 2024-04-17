@@ -2,11 +2,8 @@ dependencies:
 - name: tembo-operator
   repository: https://tembo-io.github.io/tembo
   version: 0.5.0
-- name: cloudnative-pg
-  repository: https://cloudnative-pg.github.io/charts
-  version: 0.20.1
 - name: conductor
   repository: https://tembo-io.github.io/tembo
   version: 0.3.0
-digest: sha256:65aa4bf59eb051e229d988db7c0a4ac214b84c1f3edb20ce2ddbb9dec9ee56d5
-generated: "2024-04-16T21:11:03.483110568-04:00"
+digest: sha256:177871ae53366c96aafb10ffbf50c92f96bfd11c564ae45ab0ef2883b0443824
+generated: "2024-04-17T14:17:36.78823975-04:00"
