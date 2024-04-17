@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cpReconciler.fullname" . }}
+  labels:
+    {{- include "cpReconciler.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.cpReconciler.service.type }}
+  ports:
+    - port: {{ .Values.cpReconciler.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "cpReconciler.selectorLabels" . | nindent 4 }}
