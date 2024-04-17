@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-cp-database
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    metadata:
+      name: create-cp-database
+    spec:
+      serviceAccountName: tembo-conductor
+      containers:
+        - name: kubectl
+          image: "k8s.gcr.io/hyperkube:v1.12.1"
+          imagePullPolicy: "IfNotPresent"
+          command:
+            - /bin/sh
+            - -c
+            - >
+              sleep 10;
+              kubectl create -f - <<EOF
+                apiVersion: coredb.io/v1alpha1
+                kind: CoreDB
+                metadata:
+                  name: sample-coredb
+                spec:
+                  image: quay.io/tembo/standard-cnpg:15-120cc24
+                  stop: false
+                  extensions:
+                    - name: pg_stat_statements
+                      locations:
+                        - enabled: true
+                          database: postgres
+                          schema: public
+                          version: "1.10.0"
+                    - name: pg_cron
+                      locations:
+                        - enabled: true
+                          database: postgres
+                          schema: public
+                          version: "1.6.2"
+                  runtime_config:
+                    - name: shared_preload_libraries
+                      value: 'pg_cron,pg_stat_statements'
+                    - name: pg_stat_statements.track
+                      value: top
+              EOF
+      restartPolicy: OnFailure
+

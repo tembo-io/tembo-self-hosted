@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: label-namespace
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: post-install
+spec:
+  template:
+    metadata:
+      name: label-namespace
+    spec:
+      serviceAccountName: tembo-conductor
+      containers:
+        - name: kubectl
+          image: "k8s.gcr.io/hyperkube:v1.12.1"
+          imagePullPolicy: "IfNotPresent"
+          command:
+            - /bin/sh
+            - -c
+            - >
+              kubectl label namespace {{ .Release.Namespace }} "tembo-pod-init.tembo.io/watch"="true"
+      restartPolicy: OnFailure
