@@ -39,13 +39,6 @@ spec:
               containerPort: 8080
               protocol: TCP
           env:
-          - name: PG_CONN_URL
-            valueFrom:
-              secretKeyRef:
-                name: data-plane
-                key: _data-plane_postgres_connection_string
-          - name: cpWebserver_ENABLED
-            value: "true"
           - name: RUST_LOG
             value: {{ .Values.cpWebserver.logLevel }}
           {{- if .Values.cpWebserver.env }}{{ .Values.cpWebserver.env | default list | toYaml | nindent 10 }}{{- end }}

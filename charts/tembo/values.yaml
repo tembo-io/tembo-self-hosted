@@ -360,6 +360,10 @@ cpWebserver:
     # when this is set to empty string.
     name: ""
 
+  service:
+    type: ClusterIP
+    port: 80
+
   imagePullSecrets: []
   nameOverride: cp-webserver
   fullnameOverride: ""
@@ -369,7 +373,46 @@ cpWebserver:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  env: {}
+  env:
+    - name: SERVICE_NAME
+      value: cp-webserver
+    - name: TRUNK_INSTALLS_IN_EXTENSION_LIST
+      value: 'false'
+    - name: POSTGRES_CONNECTION
+      valueFrom:
+        secretKeyRef:
+          key: control-plane-connection
+          name: control-plane-webserver
+    - name: POSTGRES_QUEUE_CONNECTION
+      valueFrom:
+        secretKeyRef:
+          key: control-plane-queue-connection
+          name: control-plane-webserver
+    - name: CLERK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          key: control-plane-clerk-token
+          name: control-plane-webserver
+    - name: CLERK_WEBHOOK_SIGNING_SECRET
+      valueFrom:
+        secretKeyRef:
+          key: control-plane-clerk-webhook-signing-secret
+          name: control-plane-webserver
+#    - name: STRIPE_SECRET_KEY
+#      valueFrom:
+#        secretKeyRef:
+#          key: _control-plane_stripe_secret_key
+#          name: control-plane-metronome
+#    - name: STRIPE_WEBHOOK_SIGNING_SECRET
+#      valueFrom:
+#        secretKeyRef:
+#          key: _control-plane_stripe-webhook-signing-secret
+#          name: control-plane-webserver
+#    - name: METRONOME_SECRET_KEY
+#      valueFrom:
+#        secretKeyRef:
+#          key: _control-plane_metronome_token
+#          name: control-plane-metronome
 
 cpReconciler:
   logLevel: info
