@@ -1,5 +1,7 @@
 # Tembo Enterprise
 
+[![Static Badge](https://img.shields.io/badge/%40tembo-community?logo=slack&label=slack)](https://join.slack.com/t/tembocommunity/shared_invite/zt-293gc1k0k-3K8z~eKW1SEIfrqEI~5_yw)
+
 This repository contains the helm chart for deploying [Tembo Enterprise](https://tembo.io/docs/product/software/tembo-enterprise/overview)
 on a Kubernetes cluster.
 
