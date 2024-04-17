@@ -284,6 +284,7 @@ cpService:
       memory: 128Mi
 
   serviceAccount:
+    create: true
     annotations: {}
     # Defaults to match name of deployment,
     # when this is set to empty string.
@@ -355,6 +356,7 @@ cpWebserver:
       memory: 128Mi
 
   serviceAccount:
+    create: true
     annotations: {}
     # Defaults to match name of deployment,
     # when this is set to empty string.
@@ -446,6 +448,7 @@ cpReconciler:
       memory: 128Mi
 
   serviceAccount:
+    create: true
     annotations: {}
     # Defaults to match name of deployment,
     # when this is set to empty string.
@@ -519,6 +522,7 @@ dataplaneWebserver:
       memory: 128Mi
 
   serviceAccount:
+    create: true
     annotations: {}
     # Defaults to match name of deployment,
     # when this is set to empty string.
