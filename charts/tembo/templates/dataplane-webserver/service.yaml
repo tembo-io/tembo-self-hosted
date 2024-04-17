@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dataplaneWebserver.fullname" . }}
+  labels:
+    {{- include "dataplaneWebserver.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.dataplaneWebserver.service.type }}
+  ports:
+    - port: {{ .Values.dataplaneWebserver.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dataplaneWebserver.selectorLabels" . | nindent 4 }}
