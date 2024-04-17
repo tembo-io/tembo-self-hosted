@@ -275,9 +275,6 @@ cpService:
     tag: 27b3eb9
     pullPolicy: IfNotPresent
 
-  # We should reconfigure the defaults
-  # once we have more information about this
-  # workload in practice.
   resources:
     limits:
       cpu: 1
@@ -292,6 +289,10 @@ cpService:
     # when this is set to empty string.
     name: ""
 
+  service:
+    type: ClusterIP
+    port: 80
+
   imagePullSecrets: []
   nameOverride: cp-service
   fullnameOverride: ""
@@ -301,7 +302,23 @@ cpService:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  env: {}
+  env:
+    - name: SERVICE_NAME
+      value: cp-service
+    - name: RUN_RECONCILE
+      value: 'false'
+    - name: RUN_REPORTER
+      value: 'true'
+    - name: POSTGRES_CONNECTION
+      valueFrom:
+        secretKeyRef:
+          key: control-plane-connection
+          name: control-plane-service
+    - name: POSTGRES_QUEUE_CONNECTION
+      valueFrom:
+        secretKeyRef:
+          key: control-plane-queue-connection
+          name: control-plane-service
 
 cpWebserver:
   logLevel: info
