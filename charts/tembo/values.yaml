@@ -528,6 +528,10 @@ dataplaneWebserver:
     # when this is set to empty string.
     name: ""
 
+  service:
+    type: ClusterIP
+    port: 80
+
   imagePullSecrets: []
   nameOverride: dataplane-webserver
   fullnameOverride: ""
