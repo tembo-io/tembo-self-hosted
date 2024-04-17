@@ -39,8 +39,6 @@ spec:
               containerPort: 8080
               protocol: TCP
           env:
-          - name: cpReconciler_ENABLED
-            value: "true"
           - name: RUST_LOG
             value: {{ .Values.cpReconciler.logLevel }}
           {{- if .Values.cpReconciler.env }}{{ .Values.cpReconciler.env | default list | toYaml | nindent 10 }}{{- end }}
