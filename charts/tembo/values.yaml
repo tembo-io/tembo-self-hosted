@@ -289,6 +289,10 @@ cpService:
     # when this is set to empty string.
     name: ""
 
+  service:
+    type: ClusterIP
+    port: 80
+
   imagePullSecrets: []
   nameOverride: cp-service
   fullnameOverride: ""
