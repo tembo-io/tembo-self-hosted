@@ -313,13 +313,13 @@ cpService:
     - name: POSTGRES_CONNECTION
       valueFrom:
         secretKeyRef:
-          key: control-plane-connection
-          name: control-plane-service
+          name: control-plane-connection
+          key: rw_uri
     - name: POSTGRES_QUEUE_CONNECTION
       valueFrom:
         secretKeyRef:
-          key: control-plane-queue-connection
-          name: control-plane-service
+          name: control-plane-queue-connection
+          key: rw_uri
 
 cpWebserver:
   logLevel: info
@@ -383,23 +383,23 @@ cpWebserver:
     - name: POSTGRES_CONNECTION
       valueFrom:
         secretKeyRef:
-          key: control-plane-connection
-          name: control-plane-webserver
+          name: control-plane-connection
+          key: rw_uri
     - name: POSTGRES_QUEUE_CONNECTION
       valueFrom:
         secretKeyRef:
-          key: control-plane-queue-connection
-          name: control-plane-webserver
-    - name: CLERK_SECRET_KEY
-      valueFrom:
-        secretKeyRef:
-          key: control-plane-clerk-token
-          name: control-plane-webserver
-    - name: CLERK_WEBHOOK_SIGNING_SECRET
-      valueFrom:
-        secretKeyRef:
-          key: control-plane-clerk-webhook-signing-secret
-          name: control-plane-webserver
+          name: control-plane-queue-connection
+          key: rw_uri
+#    - name: CLERK_SECRET_KEY
+#      valueFrom:
+#        secretKeyRef:
+#          key: control-plane-clerk-token
+#          name: control-plane-webserver
+#    - name: CLERK_WEBHOOK_SIGNING_SECRET
+#      valueFrom:
+#        secretKeyRef:
+#          key: control-plane-clerk-webhook-signing-secret
+#          name: control-plane-webserver
 #    - name: STRIPE_SECRET_KEY
 #      valueFrom:
 #        secretKeyRef:
@@ -479,13 +479,13 @@ cpReconciler:
     - name: POSTGRES_CONNECTION
       valueFrom:
         secretKeyRef:
-          name: control-plane-reconciler
-          key: control-plane-connection
+          name: control-plane-connection
+          key: rw_uri
     - name: POSTGRES_QUEUE_CONNECTION
       valueFrom:
         secretKeyRef:
-          name: control-plane-reconciler
-          key: control-plane-queue-connection
+          name: control-plane-queue-connection
+          key: rw_uri
 
 dataplaneWebserver:
   logLevel: info
