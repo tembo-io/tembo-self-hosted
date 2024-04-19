@@ -1,8 +1,8 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: create-cp-database
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "initControlPlaneDatabaseJob.fullname" . }}
+  labels: {{- include "initControlPlaneDatabaseJob.labels" . | nindent 4 }}
 spec:
   template:
     metadata:

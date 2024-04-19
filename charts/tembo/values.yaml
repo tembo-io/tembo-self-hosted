@@ -26,7 +26,7 @@ conductor:
 
   image:
     repository: quay.io/tembo/conductor
-    tag: 0.1.0
+    tag: 2d74f04
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -72,8 +72,6 @@ conductor:
       value: data_plane_events
     - name: DATA_PLANE_BASEDOMAIN
       value: localhost
-    - name: BACKUP_ARCHIVE_BUCKET
-      value: dummy-bucket-backups
     - name: BACKUP_ARCHIVE_BUCKET
       value: dummy-bucket-backups
     - name: CF_TEMPLATE_BUCKET
