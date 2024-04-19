@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "temboUI.fullname" . }}
+  labels:
+    {{- include "temboUI.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.temboUI.replicas }}
+  selector:
+    matchLabels:
+      {{- include "temboUI.selectorLabels" . | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      {{- with .Values.temboUI.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "temboUI.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.temboUI.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "temboUI.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.temboUI.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          env:
+          - name: RUST_LOG
+            value: {{ .Values.temboUI.logLevel }}
+          {{- if .Values.temboUI.env }}{{ .Values.temboUI.env | default list | toYaml | nindent 10 }}{{- end }}
+          securityContext:
+            {{- toYaml .Values.temboUI.securityContext | nindent 12 }}
+          image: "{{ .Values.temboUI.image.repository }}:{{ .Values.temboUI.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.temboUI.image.pullPolicy }}
+{{/*          livenessProbe:*/}}
+{{/*            httpGet:*/}}
+{{/*              path: "/health/lively"*/}}
+{{/*              port: http*/}}
+{{/*          readinessProbe:*/}}
+{{/*            httpGet:*/}}
+{{/*              path: "/health/lively"*/}}
+{{/*              port: http*/}}
+          resources:
+            {{- toYaml .Values.temboUI.resources | nindent 12 }}
+      {{- with .Values.temboUI.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.temboUI.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.temboUI.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
