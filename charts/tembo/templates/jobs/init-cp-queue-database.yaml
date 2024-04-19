@@ -1,8 +1,8 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: create-cp-queue-database
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "initControlPlaneQueueDatabaseJob.fullname" . }}
+  labels: {{- include "initControlPlaneQueueDatabaseJob.labels" . | nindent 4 }}
 spec:
   template:
     metadata:
