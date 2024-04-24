@@ -26,7 +26,7 @@ conductor:
 
   image:
     repository: quay.io/tembo/conductor
-    tag: 2d74f04
+    tag: dc67666
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -76,6 +76,8 @@ conductor:
       value: tembo-enterprise
     - name: CF_TEMPLATE_BUCKET
       value: tembo-enterprise
+    - name: METRICS_EVENTS_QUEUE
+      value: metrics_events
 
 tembo-operator:
   # -- The controller configuration
@@ -292,7 +294,7 @@ cpService:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: 27b3eb9
+    tag: f5501a9
     pullPolicy: IfNotPresent
 
   resources:
@@ -361,7 +363,7 @@ cpWebserver:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: 27b3eb9
+    tag: f5501a9
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -443,7 +445,7 @@ cpReconciler:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: 27b3eb9
+    tag: f5501a9
     pullPolicy: IfNotPresent
 
   resources:
