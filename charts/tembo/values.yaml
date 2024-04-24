@@ -420,6 +420,8 @@ cpWebserver:
       value: ~
     - name: METRONOME_SECRET_KEY
       value: ~
+    - name: DEFAULT_CONTAINER_REGISTRY
+      value: quay.io/tembo
 
 cpReconciler:
   logLevel: info
