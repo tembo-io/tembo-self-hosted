@@ -398,20 +398,6 @@ cpWebserver:
   tolerations: []
   affinity: {}
   env:
-    - name: SERVICE_NAME
-      value: cp-webserver
-    - name: TRUNK_INSTALLS_IN_EXTENSION_LIST
-      value: 'false'
-    - name: POSTGRES_CONNECTION
-      valueFrom:
-        secretKeyRef:
-          name: control-plane-connection
-          key: rw_uri
-    - name: POSTGRES_QUEUE_CONNECTION
-      valueFrom:
-        secretKeyRef:
-          name: control-plane-queue-connection
-          key: rw_uri
     - name: CLERK_SECRET_KEY
       value: ~
     - name: CLERK_WEBHOOK_SIGNING_SECRET
@@ -581,7 +567,7 @@ temboUI:
   resources:
     limits:
       cpu: 1
-      memory: 256Mi
+      memory: 512Mi
     requests:
       cpu: 100m
       memory: 128Mi

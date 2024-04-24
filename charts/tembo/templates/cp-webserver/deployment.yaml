@@ -39,6 +39,20 @@ spec:
               containerPort: 8080
               protocol: TCP
           env:
+          - name: SERVICE_NAME
+            value: cp-webserver
+          - name: TRUNK_INSTALLS_IN_EXTENSION_LIST
+            value: 'false'
+          - name: POSTGRES_CONNECTION
+            valueFrom:
+              secretKeyRef:
+                name: control-plane-connection
+                key: rw_uri
+          - name: POSTGRES_QUEUE_CONNECTION
+            valueFrom:
+              secretKeyRef:
+                name: control-plane-queue-connection
+                key: rw_uri
           - name: RUST_LOG
             value: {{ .Values.cpWebserver.logLevel }}
           {{- if .Values.cpWebserver.env }}{{ .Values.cpWebserver.env | default list | toYaml | nindent 10 }}{{- end }}
