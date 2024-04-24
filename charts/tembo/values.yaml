@@ -73,9 +73,9 @@ conductor:
     - name: DATA_PLANE_BASEDOMAIN
       value: localhost
     - name: BACKUP_ARCHIVE_BUCKET
-      value: dummy-bucket-backups
+      value: tembo-enterprise
     - name: CF_TEMPLATE_BUCKET
-      value: dummy-bucket-conductor-cf-templates
+      value: tembo-enterprise
 
 tembo-operator:
   # -- The controller configuration
@@ -410,31 +410,16 @@ cpWebserver:
         secretKeyRef:
           name: control-plane-queue-connection
           key: rw_uri
-#    - name: CLERK_SECRET_KEY
-#      valueFrom:
-#        secretKeyRef:
-#          key: control-plane-clerk-token
-#          name: control-plane-webserver
-#    - name: CLERK_WEBHOOK_SIGNING_SECRET
-#      valueFrom:
-#        secretKeyRef:
-#          key: control-plane-clerk-webhook-signing-secret
-#          name: control-plane-webserver
-#    - name: STRIPE_SECRET_KEY
-#      valueFrom:
-#        secretKeyRef:
-#          key: _control-plane_stripe_secret_key
-#          name: control-plane-metronome
-#    - name: STRIPE_WEBHOOK_SIGNING_SECRET
-#      valueFrom:
-#        secretKeyRef:
-#          key: _control-plane_stripe-webhook-signing-secret
-#          name: control-plane-webserver
-#    - name: METRONOME_SECRET_KEY
-#      valueFrom:
-#        secretKeyRef:
-#          key: _control-plane_metronome_token
-#          name: control-plane-metronome
+    - name: CLERK_SECRET_KEY
+      value: ~
+    - name: CLERK_WEBHOOK_SIGNING_SECRET
+      value: ~
+    - name: STRIPE_SECRET_KEY
+      value: ~
+    - name: STRIPE_WEBHOOK_SIGNING_SECRET
+      value: ~
+    - name: METRONOME_SECRET_KEY
+      value: ~
 
 cpReconciler:
   logLevel: info
@@ -583,7 +568,7 @@ temboUI:
 
   image:
     repository: quay.io/tembo/mahout-ui
-    tag: 8b96fc1
+    tag: 0.0.1-alpha9
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -617,12 +602,4 @@ temboUI:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  env:
-    - name: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-      value: ~
-    - name: CLERK_SECRET_KEY
-      value: ~
-    - name: NEXT_PUBLIC_API_BASE_URL
-      value: tembo-cp-webserver.default.svc.cluster.local
-    - name: NEXT_PUBLIC_API_BASE_URL_V1
-      value: tembo-cp-webserver.default.svc.cluster.local/v1
+  env: {}
