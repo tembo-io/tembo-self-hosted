@@ -558,7 +558,7 @@ temboUI:
 
   image:
     repository: quay.io/tembo/mahout-ui
-    tag: 0.0.1-alpha9
+    tag: 0.0.1-alpha10
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
