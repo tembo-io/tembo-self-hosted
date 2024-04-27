@@ -55,29 +55,7 @@ conductor:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  env:
-    - name: PG_CONN_URL
-      valueFrom:
-        secretKeyRef:
-          name: control-plane-connection
-          key: rw_uri
-    - name: POSTGRES_QUEUE_CONNECTION
-      valueFrom:
-          secretKeyRef:
-            name: control-plane-queue-connection
-            key: rw_uri
-    - name: CONTROL_PLANE_EVENTS_QUEUE
-      value: saas_queue
-    - name: DATA_PLANE_EVENTS_QUEUE
-      value: data_plane_events
-    - name: DATA_PLANE_BASEDOMAIN
-      value: localhost
-    - name: BACKUP_ARCHIVE_BUCKET
-      value: tembo-enterprise
-    - name: CF_TEMPLATE_BUCKET
-      value: tembo-enterprise
-    - name: METRICS_EVENTS_QUEUE
-      value: metrics_events
+  env: []
 
 tembo-operator:
   # -- The controller configuration
@@ -558,7 +536,7 @@ temboUI:
 
   image:
     repository: quay.io/tembo/mahout-ui
-    tag: 0.0.1-alpha10
+    tag: 0.0.1-alpha11
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults

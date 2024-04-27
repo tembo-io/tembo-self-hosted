@@ -7,4 +7,5 @@ keywords:
   - tembo
 dependencies:
   - name: tembo
+    condition: global.temboEnabled
     version: 24.2.0
