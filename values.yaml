@@ -1,0 +1,48 @@
+global:
+  temboEnabled: true
+tembo:
+  conductor:
+    image:
+      tag: ent-test
+    env:
+      - name: PG_CONN_URL
+        valueFrom:
+          secretKeyRef:
+            name: control-plane-connection
+            key: rw_uri
+      - name: POSTGRES_QUEUE_CONNECTION
+        valueFrom:
+          secretKeyRef:
+            name: control-plane-queue-connection
+            key: rw_uri
+      - name: CONTROL_PLANE_EVENTS_QUEUE
+        value: saas_queue
+      - name: DATA_PLANE_EVENTS_QUEUE
+        value: data_plane_events
+      - name: DATA_PLANE_BASEDOMAIN
+        value: ~
+      - name: BACKUP_ARCHIVE_BUCKET
+        value: tembo-enterprise
+      - name: CF_TEMPLATE_BUCKET
+        value: tembo-enterprise
+      - name: METRICS_EVENTS_QUEUE
+        value: metrics_events
+  tembo-operator:
+    controller:
+      extraEnv:
+        - name: DATA_PLANE_BASEDOMAIN
+          value: ~
+  cpWebserver:
+    env:
+      - name: CLERK_SECRET_KEY
+        value: ~
+      - name: CLERK_WEBHOOK_SIGNING_SECRET
+        value: ~
+      - name: STRIPE_SECRET_KEY
+        value: ~
+      - name: STRIPE_WEBHOOK_SIGNING_SECRET
+        value: ~
+      - name: METRONOME_SECRET_KEY
+        value: ~
+      - name: DEFAULT_CONTAINER_REGISTRY
+        value: quay.io/tembo
