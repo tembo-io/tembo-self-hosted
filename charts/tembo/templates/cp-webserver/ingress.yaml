@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "cpWebserver.fullname" . }}
+  labels:
+    {{- include "cpWebserver.labels" . | nindent 4 }}
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: api.{{ .Values.global.baseDomain }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ include "cpWebserver.fullname" . }}
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

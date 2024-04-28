@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "dataplaneWebserver.fullname" . }}
+  labels:
+    {{- include "dataplaneWebserver.labels" . | nindent 4 }}
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: dataplane.{{ .Values.global.baseDomain }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ include "dataplaneWebserver.fullname" . }}
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

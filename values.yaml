@@ -1,5 +1,6 @@
 global:
   temboEnabled: true
+  baseDomain: ~
 tembo:
   conductor:
     image:
