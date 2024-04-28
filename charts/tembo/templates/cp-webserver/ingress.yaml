@@ -2,11 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "cpWebserver.fullname" . }}
-  annotations:
-    kubernetes.io/ingress.class: traefik
   labels:
     {{- include "cpWebserver.labels" . | nindent 4 }}
 spec:
+  ingressClassName: traefik
   rules:
     - host: api.{{ .Values.global.baseDomain }}
       http:
