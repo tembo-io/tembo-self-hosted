@@ -55,6 +55,8 @@ spec:
                 key: rw_uri
           - name: RUST_LOG
             value: {{ .Values.cpWebserver.logLevel }}
+          - name: DEFAULT_CONTAINER_REGISTRY
+            value: quay.io/tembo
           {{- if .Values.cpWebserver.env }}{{ .Values.cpWebserver.env | default list | toYaml | nindent 10 }}{{- end }}
           securityContext:
             {{- toYaml .Values.cpWebserver.securityContext | nindent 12 }}
