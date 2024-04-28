@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "temboUI.fullname" . }}
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  labels:
+    {{- include "temboUI.labels" . | nindent 4 }}
+spec:
+  rules:
+    - host: tembo.{{ .Values.global.baseDomain }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ include "temboUI.fullname" . }}
+                port:
+                  number: 3000
+            path: /
+            pathType: Prefix
