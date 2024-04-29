@@ -1,0 +1,12 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "initControlPlaneDatabaseJob.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    namespace: {{ .Release.Namespace }}
+    name: {{ include "initControlPlaneDatabaseJob.fullname" . }}
+roleRef:
+  kind: Role
+  name: {{ include "initControlPlaneDatabaseJob.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io

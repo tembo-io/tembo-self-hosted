@@ -10,7 +10,7 @@ spec:
     metadata:
       name: label-namespace
     spec:
-      serviceAccountName: tembo-conductor
+      serviceAccountName: {{ include "labelNamespaceJob.fullname" . }}
       containers:
         - name: kubectl
           image: "k8s.gcr.io/hyperkube:v1.12.1"
