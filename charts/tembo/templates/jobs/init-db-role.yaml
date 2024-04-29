@@ -1,0 +1,8 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "initControlPlaneDatabaseJob.fullname" . }}
+rules:
+  - apiGroups: ["coredb.io"]
+    resources: ["coredbs", "coredbs/status"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
