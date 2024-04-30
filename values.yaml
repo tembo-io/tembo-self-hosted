@@ -4,8 +4,6 @@ global:
   baseDomain: ~
 tembo:
   conductor:
-    image:
-      tag: ent-test
     env:
       - name: PG_CONN_URL
         valueFrom:
@@ -18,17 +16,19 @@ tembo:
             name: control-plane-queue-connection
             key: rw_uri
       - name: CONTROL_PLANE_EVENTS_QUEUE
-        value: saas_queue
+        value: "saas_queue"
       - name: DATA_PLANE_EVENTS_QUEUE
-        value: data_plane_events
+        value: "data_plane_events"
       - name: DATA_PLANE_BASEDOMAIN
         value: ~
       - name: BACKUP_ARCHIVE_BUCKET
-        value: tembo-enterprise
+        value: "tembo-enterprise"
       - name: CF_TEMPLATE_BUCKET
-        value: tembo-enterprise
+        value: "tembo-enterprise"
       - name: METRICS_EVENTS_QUEUE
-        value: metrics_events
+        value: "metrics_events"
+      - name: IS_CLOUD_FORMATION
+        value: "false"
   tembo-operator:
     controller:
       extraEnv:
