@@ -25,6 +25,7 @@ spec:
                   name: control-plane
                 spec:
                   stop: false
+                  storage: 100Gi
                   runtime_config:
                     - name: shared_preload_libraries
                       value: 'pg_cron,pg_stat_statements'

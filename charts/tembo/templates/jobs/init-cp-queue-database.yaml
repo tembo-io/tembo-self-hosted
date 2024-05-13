@@ -25,6 +25,7 @@ spec:
                   name: control-plane-queue
                 spec:
                   stop: false
+                  storage: 200Gi
                   stack:
                     name: MessageQueue
                     postgres_config:
