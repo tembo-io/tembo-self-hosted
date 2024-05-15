@@ -101,6 +101,93 @@ Outputs:
     Value: !GetAtt S3AccessRole.Arn
 EOF
 
+# Create CloudFormation template v2
+cat >conductor-cf-template-v2.yaml <<EOF
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation Template IAM Role for S3 access'
+
+Parameters:
+  BucketName:
+    Description: 'Name of the S3 bucket'
+    Type: String
+  ReadPathPrefix:
+    Description: 'Path inside the S3 bucket that the IAM Role can read from'
+    Type: String
+    Default: ''
+  WritePathPrefix:
+    Description: 'Path inside the S3 bucket that the IAM Role can write to'
+    Type: String
+  RoleName:
+    Description: 'Name of the IAM Role for S3 access'
+    Type: String
+  Namespace:
+    Description: 'Kubernetes namespace'
+    Type: String
+  ServiceAccountName:
+    Description: 'Name of the Kubernetes service account'
+    Type: String
+
+Resources:
+  S3AccessRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Ref RoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: "arn:aws:iam::${AWS_ACCOUNT_ID}:oidc-provider/${EKS_OIDC}"
+            Action: 'sts:AssumeRoleWithWebIdentity'
+            Condition:
+              StringLike:
+                "${EKS_OIDC}:sub": !Sub "system:serviceaccount:\${Namespace}:\${ServiceAccountName}"
+      Path: '/'
+      Policies:
+        - PolicyName: 'S3CustomAccess'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:GetObject'
+                Resource:
+                  - !If
+                    - HasReadPathPrefix
+                    - !Sub "arn:aws:s3:::\${BucketName}/\${ReadPathPrefix}/*"
+                    - !Ref AWS::NoValue
+                  - !If
+                    - HasReadPathPrefix
+                    - !Sub "arn:aws:s3:::\${BucketName}/\${ReadPathPrefix}"
+                    - !Ref AWS::NoValue
+                  - !Sub "arn:aws:s3:::\${BucketName}/\${WritePathPrefix}/*"
+                  - !Sub "arn:aws:s3:::\${BucketName}/\${WritePathPrefix}"
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                  - 's3:DeleteObject'
+                Resource:
+                  - !Sub "arn:aws:s3:::\${BucketName}/\${WritePathPrefix}/*"
+                  - !Sub "arn:aws:s3:::\${BucketName}/\${WritePathPrefix}"
+              - Effect: Allow
+                Action:
+                  - 's3:ListBucket'
+                Resource:
+                  - !Sub "arn:aws:s3:::\${BucketName}"
+
+Conditions:
+  HasReadPathPrefix: !Not [!Equals [!Ref ReadPathPrefix, '']]
+
+Outputs:
+  RoleName:
+    Description: IAM Role Name for S3 access
+    Value: !Ref S3AccessRole
+  RoleArn:
+    Description: IAM Role ARN for S3 access
+    Value: !GetAtt S3AccessRole.Arn
+EOF
+
 # Create bucket policy for CloudFormation bucket
 cat >tembo-cf-bucket-policy.json <<EOF
 {
@@ -188,7 +275,9 @@ cat >tembo-iam-policy.json <<EOF
                "StringEquals": {
                    "cloudformation:TemplateUrl": [
                        "s3://${CF_BUCKET_NAME}/conductor-cf-template.yaml",
-                       "https://${CF_BUCKET_NAME}.s3.amazonaws.com/conductor-cf-template.yaml"
+                       "https://${CF_BUCKET_NAME}.s3.amazonaws.com/conductor-cf-template.yaml",
+                       "s3://${CF_BUCKET_NAME}/conductor-cf-template-v2.yaml",
+                       "https://${CF_BUCKET_NAME}.s3.amazonaws.com/conductor-cf-template-v2.yaml"
                    ]
                }
            },
