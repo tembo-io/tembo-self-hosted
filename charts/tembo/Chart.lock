@@ -4,6 +4,6 @@ dependencies:
   version: 0.5.1
 - name: conductor
   repository: https://tembo-io.github.io/tembo
-  version: 0.3.1
-digest: sha256:7a2676f3f8079027b31a66cb335c31c4fbb473090d3d0bbe2d027684f95d5627
-generated: "2024-04-24T14:25:43.339584402-04:00"
+  version: 0.4.0
+digest: sha256:92d3b298b884e9f86e03f23d9463dae3c32bd12dd6b6ecd6b8069d7c31734d2f
+generated: "2024-05-15T14:33:49.420729696-04:00"
