@@ -26,7 +26,7 @@ conductor:
 
   image:
     repository: quay.io/tembo/conductor
-    tag: dc67666
+    tag: "9644499"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -272,7 +272,7 @@ cpService:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: f5501a9
+    tag: 1e73d9d
     pullPolicy: IfNotPresent
 
   resources:
@@ -341,7 +341,7 @@ cpWebserver:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: f5501a9
+    tag: 1e73d9d
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -407,7 +407,7 @@ cpReconciler:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: f5501a9
+    tag: 1e73d9d
     pullPolicy: IfNotPresent
 
   resources:
