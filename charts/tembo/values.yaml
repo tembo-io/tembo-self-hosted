@@ -79,7 +79,7 @@ tembo-operator:
       repository: quay.io/tembo/tembo-operator
       pullPolicy: Always
       # -- Overrides the image tag whose default is latest
-      tag: latest
+      tag: "9644499"
 
     crds:
       # -- Specifies whether the CRDs should be created when installing the chart.
@@ -175,7 +175,7 @@ tembo-operator:
       repository: quay.io/tembo/tembo-pod-init
       pullPolicy: IfNotPresent
       # -- Overrides the image tag whose default is latest
-      tag: latest
+      tag: "9644499"
 
     extraEnv: []
 
@@ -272,7 +272,7 @@ cpService:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: 1e73d9d
+    tag: "162404b"
     pullPolicy: IfNotPresent
 
   resources:
@@ -341,7 +341,7 @@ cpWebserver:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: 1e73d9d
+    tag: "162404b"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -407,7 +407,7 @@ cpReconciler:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: 1e73d9d
+    tag: "162404b"
     pullPolicy: IfNotPresent
 
   resources:
@@ -478,7 +478,7 @@ dataplaneWebserver:
 
   image:
     repository: quay.io/tembo/dataplane-webserver
-    tag: ca7c43e
+    tag: "9644499"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
