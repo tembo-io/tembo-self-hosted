@@ -1,0 +1,20 @@
+# This is intended to be paired with a forward auth middleware
+# and a Loki multi-tenancy configuration.
+{{- if .Values.ingressRouteLoki.enabled }}
+{{- $domains := required "IngressRouteLoki is enabled, but no domains are provided in .Values.ingressRouteLoki.domains" .Values.ingressRouteLoki.domains }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: loki-{{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - kind: Rule
+    match: ({{ range $index, $domain := $domains }}Host(`{{ $domain }}`){{ if lt $index (sub (len $domains) 1) }} || {{ end }}{{ end }}) && PathPrefix(`/loki/`)
+    services:
+    - name: loki-read
+      port: 3100
+  tls: {}
+{{- end }}

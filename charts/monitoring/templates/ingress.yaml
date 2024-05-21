@@ -1,0 +1,87 @@
+{{- define "ingress.annotations" -}}
+alb.ingress.kubernetes.io/backend-protocol: HTTP
+alb.ingress.kubernetes.io/group.name: {{ .Values.ingress.albGroupName }}
+alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS":443}]'
+# Ingress only internally for unauthenticated endpoints like Prometheus
+alb.ingress.kubernetes.io/scheme: internal
+alb.ingress.kubernetes.io/ssl-redirect: "443"
+alb.ingress.kubernetes.io/target-type: ip
+kubernetes.io/ingress.class: alb
+{{- end }}
+
+
+{{- if .Values.ingress.enabled -}}
+
+{{- if not .Values.ingress.albGroupName -}}
+{{ fail "You must set ingress.albGroupName" }}
+{{- end }}
+
+{{- if not .Values.ingress.baseDomain -}}
+{{ fail "You must set ingress.baseDomain" }}
+{{- end }}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+{{ include "ingress.annotations" . | indent 4 }}
+  name: {{ .Release.Name }}-grafana
+  namespace: {{ .Release.Namespace }}
+spec:
+  rules:
+  - host: grafana{{ .Values.ingress.subdomainSuffix }}.{{ .Values.ingress.baseDomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Release.Name }}-grafana
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+{{ include "ingress.annotations" . | indent 4}}
+  name: {{ .Release.Name }}-prometheus
+  namespace: {{ .Release.Namespace }}
+spec:
+  rules:
+  - host: prometheus{{ .Values.ingress.subdomainSuffix }}.{{ .Values.ingress.baseDomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Release.Name }}-kube-prometheus-prometheus
+            port:
+              number: 9090
+        path: /
+        pathType: Prefix
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+{{ include "ingress.annotations" . | indent 4}}
+  name: {{ .Release.Name }}-alertmanager
+  namespace: {{ .Release.Namespace }}
+spec:
+  rules:
+  - host: alertmanager{{ .Values.ingress.subdomainSuffix }}.{{ .Values.ingress.baseDomain }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Release.Name }}-kube-prometheus-alertmanager
+            port:
+              number: 9093
+        path: /
+        pathType: Prefix
+
+{{- end }}

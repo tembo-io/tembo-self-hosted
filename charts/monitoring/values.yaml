@@ -1,0 +1,279 @@
+ingress:
+  enabled: false
+  baseDomain: ~
+  subdomainSuffix: ""
+
+pagerDuty:
+  routingKey: ~
+
+deadMansSnitch:
+  webhook_url: ""
+
+ingressRouteLoki:
+  enabled: false
+  domains: []
+
+slackAlerting:
+  enabled: false
+  channel: ""
+  slackWebhookUrl: ""
+
+promtail:
+  # All nodes must have logging
+  priorityClassName: system-node-critical
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: "100%"
+  config:
+    # https://github.com/grafana/helm-charts/blob/3d30eca342dc5bf0e962ce41785717493ef39319/charts/promtail/values.yaml#L330
+    clients:
+      - url: http://loki-gateway/loki/api/v1/push
+        # Default tenant ID:
+        # https://itnext.io/multi-tenancy-with-loki-promtail-and-grafana-demystified-e93a2a314473
+        # https://grafana.com/docs/loki/latest/operations/multi-tenancy/
+        tenant_id: internal
+loki:
+  storage:
+    type: s3
+  storage_config:
+    aws:
+      insecure: false
+      s3forcepathstyle: true
+    boltdb_shipper:
+      active_index_directory: /var/loki/index
+      shared_store: s3
+  schema_config:
+    configs:
+      - from: "2022-01-11"
+        index:
+          period: 24h
+          prefix: loki_index_
+        store: boltdb-shipper
+        object_store: s3
+        schema: v12
+  commonConfig:
+    path_prefix: /var/loki
+    # https://grafana.com/docs/loki/latest/fundamentals/architecture/components/
+    replication_factor: 1
+  minio:
+    enabled: true
+  read:
+    replicas: 2
+    autoscaling:
+      # https://github.com/grafana/loki/issues/7097
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 5
+    resources:
+      requests:
+        memory: "1000Mi"
+        cpu: "1000m"
+      limits:
+        memory: "4000Mi"
+        cpu: "4000m"
+  gateway:
+    resources:
+      requests:
+        memory: "50Mi"
+        cpu: "100m"
+      limits:
+        memory: "100Mi"
+        cpu: "1000m"
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 5
+  write:
+    replicas: 2
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "100m"
+      limits:
+        memory: "3Gi"
+        cpu: "1000m"
+  loki:
+    auth_enabled: true
+    limits_config:
+      # 31 days
+      retention_period: 744h
+    query_scheduler:
+      max_outstanding_requests_per_tenant: 2048
+  monitoring:
+    lokiCanary:
+      updateStrategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: "100%"
+      resources:
+        requests:
+          memory: "50Mi"
+          cpu: "10m"
+        limits:
+          memory: "100Mi"
+          cpu: "100m"
+      # All nodes must have the logging monitor
+      priorityClassName: system-node-critical
+    # This setting deploys a logging agent, so that
+    # this chart can by default have logs ready,
+    # however it's not intended to be used for the
+    # whole cluster's logs.
+    selfMonitoring:
+      enabled: false
+  test:
+    enabled: false
+kube-prometheus-stack:
+  kube-state-metrics:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
+  alertmanager:
+    alertmanagerSpec:
+      alertmanagerConfiguration:
+        name: global-default-alertmanager-config
+      alertmanagerConfigSelector: {}
+      resources:
+        limits:
+          cpu: 100m
+          memory: 100Mi
+        requests:
+          cpu: 10m
+          memory: 50Mi
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: gp3-enc
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 10Gi
+  prometheus:
+    prometheusSpec:
+      replicas: 1
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+      resources:
+        limits:
+          cpu: 1000m
+          # Prometheus will use more memory while loading the write ahead log
+          # during restart.
+          memory: 4000Mi
+        requests:
+          cpu: 100m
+          memory: 2000Mi
+      retention: 31d
+      # Select prometheus rules from everywhere
+      ruleSelectorNilUsesHelmValues: false
+      ruleSelector: {}
+      ruleNamespaceSelector: {}
+      # Select service monitors from everywhere
+      serviceMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelector: {}
+      serviceMonitorNamespaceSelector: {}
+      # Select pod monitors from everywhere
+      podMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelector: {}
+      podMonitorNamespaceSelector: {}
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: gp3-enc
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 100Gi
+  defaultRules:
+    disabled:
+      KubeletTooManyPods: true
+      KubeMemoryOvercommit: true
+      KubeCPUOvercommit: true
+      InfoInhibitor: true
+  grafana:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 400Mi
+      requests:
+        cpu: 100m
+        memory: 250Mi
+    sidecar:
+      dashboards:
+        searchNamespace: ALL
+    persistence:
+      enabled: true
+      type: pvc
+      size: 100Gi
+    deploymentStrategy:
+      type: RollingUpdate
+      # Since we have a persistent volume, we need to
+      # delete, then create the new one instead of
+      # having a seamless update.
+      rollingUpdate:
+        maxUnavailable: "100%"
+        maxSurge: "0%"
+    adminPassword: "admin"
+    ingress:
+      enabled: false
+      hosts: []
+    additionalDataSources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki-gateway
+        jsonData:
+          maxLines: 1000
+          httpHeaderName1: "X-Scope-OrgID"
+        secureJsonData:
+          httpHeaderValue1: "internal"
+  prometheus-node-exporter:
+    priorityClassName: system-node-critical
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: eks.amazonaws.com/compute-type
+                  operator: NotIn
+                  values:
+                    - fargate
+  kubeControllerManager:
+    enabled: false
+  kubeScheduler:
+    enabled: false
+  kubelet:
+    serviceMonitor:
+      relabelings:
+        - action: replace
+          sourceLabels: [__metrics_path__]
+          targetLabel: metrics_path
+        - sourceLabels:
+            - "__meta_kubernetes_endpoint_address_target_name"
+          action: drop
+          regex: 'fargate-.*'
+      cAdvisorRelabelings:
+        - action: replace
+          sourceLabels:
+            - "__metrics_path__"
+          targetLabel: metrics_path
+        - sourceLabels:
+            - "__meta_kubernetes_endpoint_address_target_name"
+          action: drop
+          regex: 'fargate-.*'
+      probesRelabelings:
+        - action: replace
+          sourceLabels:
+            - "__metrics_path__"
+          targetLabel: metrics_path
+        - sourceLabels:
+            - "__meta_kubernetes_endpoint_address_target_name"
+          action: drop
+          regex: 'fargate-.*'
