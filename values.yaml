@@ -1,5 +1,6 @@
 global:
   temboEnabled: true
+  monitoringEnabled: true
   conductorEnabled: false
   baseDomain: ~
 tembo:
@@ -22,9 +23,9 @@ tembo:
       - name: DATA_PLANE_BASEDOMAIN
         value: ~
       - name: BACKUP_ARCHIVE_BUCKET
-        value: "tembo-enterprise"
+        value: "tembo-backups"
       - name: CF_TEMPLATE_BUCKET
-        value: "tembo-enterprise"
+        value: "tembo-cf-templates"
       - name: METRICS_EVENTS_QUEUE
         value: "metrics_events"
       - name: IS_CLOUD_FORMATION
