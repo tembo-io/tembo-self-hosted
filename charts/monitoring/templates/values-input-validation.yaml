@@ -1,0 +1,4 @@
+# https://github.com/helm/helm/issues/2192#issuecomment-293739257
+{{- if not (index .Values "kube-prometheus-stack").grafana.adminPassword -}}
+{{ fail "You must set kube-prometheus-stack.grafana.adminPassword." }}
+{{- end }}

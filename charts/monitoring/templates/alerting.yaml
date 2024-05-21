@@ -1,0 +1,108 @@
+{{- if .Values.slackAlerting.enabled }}
+
+{{- if not (and .Values.slackAlerting.channel .Values.slackAlerting.slackWebhookUrl) -}}
+{{ fail "You must set slackAlerting.slackWebhookUrl and slackAlerting.channel" }}
+{{- end }}
+
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: global-default-alertmanager-config
+  namespace: {{ .Release.Namespace }}
+spec:
+  route:
+    groupBy: ['alertname']
+    groupWait: 120s
+    groupInterval: 5m
+    repeatInterval: 12h
+    receiver: 'slack-receiver'
+    routes:
+    {{- if .Values.deadManSnitch.webhook_url }}
+    - receiver: 'deadmansnitch'
+      groupWait: 0s
+      groupInterval: 1m
+      repeatInterval: 1m
+      matchers:
+      - matchType: =
+        name: alertname
+        value: Watchdog
+      - matchType: =
+        name: severity
+        value: none
+    {{- else }}
+    - receiver: 'null'
+      matchers:
+      - matchType: =
+        name: alertname
+        value: Watchdog
+      - matchType: =
+        name: severity
+        value: none
+    {{- end }}
+    {{- if .Values.pagerDuty.routingKey }}
+    - receiver: 'pagerduty-receiver'
+      matchers:
+      - matchType: =
+        name: severity
+        value: critical
+      continue: true
+    {{- end }}
+    - receiver: 'slack-receiver'
+  receivers:
+    - name: 'null'
+    {{- if .Values.deadManSnitch.webhook_url }}
+    - name: deadmansnitch
+      webhookConfigs:
+      - url: {{ .Values.deadManSnitch.webhook_url }}
+    {{- end }}
+    - name: slack-receiver
+      slackConfigs:
+      - apiURL:
+          key: slack_webhook_url
+          name: {{ .Release.Name }}-slack-webhook-url
+          optional: false
+        text: |
+
+          https://alertmanager{{ .Values.ingress.subdomainSuffix }}.{{ .Values.ingress.baseDomain }}
+          https://grafana{{ .Values.ingress.subdomainSuffix }}.{{ .Values.ingress.baseDomain }}
+          https://prometheus{{ .Values.ingress.subdomainSuffix }}.{{ .Values.ingress.baseDomain }}
+
+{{ .Files.Get "files/slack-notification-template.txt" | indent 10 }}
+        title: '{{ .Files.Get "files/slack-notification-title.txt" }}'
+        channel: "{{ .Values.slackAlerting.channel }}"
+        sendResolved: true
+        username: "alertmanager{{ .Values.ingress.subdomainSuffix }}.{{ .Values.ingress.baseDomain }}"
+    {{- if .Values.pagerDuty.routingKey }}
+    - name: pagerduty-receiver
+      pagerdutyConfigs:
+        - routingKey:
+            key: pagerduty_routing_key
+            name: {{ .Release.Name }}-pagerduty-routing-key
+            optional: false
+          sendResolved: true
+    {{- end }}
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-slack-webhook-url
+  namespace: {{ .Release.Namespace }}
+data:
+  slack_webhook_url: {{ .Values.slackAlerting.slackWebhookUrl |  b64enc }}
+
+
+{{- if .Values.pagerDuty.routingKey }}
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-pagerduty-routing-key
+  namespace: {{ .Release.Namespace }}
+data:
+  pagerduty_routing_key: {{ .Values.pagerDuty.routingKey | b64enc }}
+{{- end }}
+
+{{- end }}
