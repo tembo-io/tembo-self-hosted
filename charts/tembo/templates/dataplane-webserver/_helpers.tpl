@@ -61,12 +61,11 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{/* Prometheus Service Prefix */}}
+{{/*
+Prometheus Service Prefix
+*/}}
 {{- define "dataplaneWebserver.prometheusServicePrefix" -}}
 {{- printf "%s-kube-prometheus-stack" .Release.Name | trunc 26 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
 {{- end }}
 
 {{/*
