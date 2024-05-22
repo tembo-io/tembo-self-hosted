@@ -60,3 +60,18 @@ Create the name of the service account to use
 {{- default "default" .Values.dataplaneWebserver.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/* Prometheus Service Prefix */}}
+{{- define "dataplaneWebserver.prometheusServicePrefix" -}}
+{{- printf "%s-kube-prometheus-stack" .Release.Name | trunc 26 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+{{- end }}
+
+{{/*
+Prometheus URL
+*/}}
+{{- define "dataplaneWebserver.prometheusUrl" -}}
+{{- printf "http://%s-prometheus.%s.svc.cluster.local:9090" (include "dataplaneWebserver.prometheusServicePrefix" .) .Release.Namespace }}
+{{- end }}
