@@ -41,6 +41,8 @@ spec:
           env:
           - name: RUST_LOG
             value: {{ .Values.dataplaneWebserver.logLevel }}
+          - name: PROMETHEUS_URL
+            value: {{ include "dataplaneWebserver.prometheusUrl" . }}
           {{- if .Values.dataplaneWebserver.env }}{{ .Values.dataplaneWebserver.env | default list | toYaml | nindent 10 }}{{- end }}
           securityContext:
             {{- toYaml .Values.dataplaneWebserver.securityContext | nindent 12 }}
