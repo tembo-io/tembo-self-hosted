@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cpMetricsWatcher.fullname" . }}
+  labels:
+    {{- include "cpMetricsWatcher.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.cpMetricsWatcher.replicas }}
+  selector:
+    matchLabels:
+      {{- include "cpMetricsWatcher.selectorLabels" . | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      {{- with .Values.cpMetricsWatcher.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cpMetricsWatcher.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.cpMetricsWatcher.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cpMetricsWatcher.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.cpMetricsWatcher.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          command:
+          - /usr/local/bin/cp-service
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+          - name: RUST_LOG
+            value: {{ .Values.cpMetricsWatcher.logLevel }}
+          {{- if .Values.cpMetricsWatcher.env }}{{ .Values.cpMetricsWatcher.env | default list | toYaml | nindent 10 }}{{- end }}
+          securityContext:
+            {{- toYaml .Values.cpMetricsWatcher.securityContext | nindent 12 }}
+          image: "{{ .Values.cpMetricsWatcher.image.repository }}:{{ .Values.cpMetricsWatcher.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.cpMetricsWatcher.image.pullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: "/health/lively"
+              port: http
+          readinessProbe:
+            httpGet:
+              path: "/health/lively"
+              port: http
+          resources:
+            {{- toYaml .Values.cpMetricsWatcher.resources | nindent 12 }}
+      {{- with .Values.cpMetricsWatcher.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.cpMetricsWatcher.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.cpMetricsWatcher.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
