@@ -8,7 +8,7 @@ conductor:
   replicas: 1
 
   podMonitor:
-    enabled: false
+    enabled: true
     port: http
     path: /metrics
 

@@ -30,11 +30,23 @@ tembo:
         value: "metrics_events"
       - name: IS_CLOUD_FORMATION
         value: "false"
+      - name: PROMETHEUS_URL
+        value: "http://tembo-kube-prometheus-stac-prometheus.tembo.svc.cluster.local:9090"
   tembo-operator:
     controller:
+      monitoring:
+        prometheusRule:
+          enabled: true
+        podMonitor:
+          enabled: true
+          port: http
+          path: /metrics
       extraEnv:
         - name: DATA_PLANE_BASEDOMAIN
           value: ~
+    cloudnative-pg:
+      monitoring:
+        podMonitorEnabled: true
   cpWebserver:
     env:
       - name: CLERK_SECRET_KEY
