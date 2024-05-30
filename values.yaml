@@ -32,9 +32,19 @@ tembo:
         value: "false"
   tembo-operator:
     controller:
+      monitoring:
+        prometheusRule:
+          enabled: true
+        podMonitor:
+          enabled: true
+          port: http
+          path: /metrics
       extraEnv:
         - name: DATA_PLANE_BASEDOMAIN
           value: ~
+    cloudnative-pg:
+      monitoring:
+        podMonitorEnabled: true
   cpWebserver:
     env:
       - name: CLERK_SECRET_KEY
@@ -47,3 +57,53 @@ tembo:
         value: ~
       - name: METRONOME_SECRET_KEY
         value: ~
+monitoring:
+  kube-prometheus-stack:
+    alertmanager:
+      alertmanagerSpec:
+        image:
+          tag: "v0.25.1"
+    grafana:
+      image:
+        tag: "10.2.3"
+    kube-state-metrics:
+      metricLabelsAllowlist:
+        - namespaces=[tembo.io/organization_id,tembo.io/instance_id]
+      metricAnnotationsAllowList:
+        - namespaces=[tembo.io/organization_id,tembo.io/instance_id]
+        - pods=[tembo.io/organization_id,tembo.io/instance_id]
+    prometheus:
+      prometheusSpec:
+        resources:
+          limits:
+            memory: 10Gi
+          requests:
+            memory: 5Gi
+  promtail:
+    config:
+      snippets:
+        extraRelabelConfigs:
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_annotation_tembo_io_organization_id
+            target_label: tembo_organization_id
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_annotation_tembo_io_instance_id
+            target_label: tembo_instance_id
+        pipelineStages:
+          - cri: { }
+          - match:
+              selector: '{tembo_organization_id=~".+"}'
+              stages:
+                - labelallow:
+                    - tembo_instance_id
+                    - tembo_organization_id
+                    - container
+                    - stream
+                    - app
+                    - pod
+                - tenant:
+                    label: tembo_organization_id
+          - output:
+              source: message

@@ -8,7 +8,7 @@ conductor:
   replicas: 1
 
   podMonitor:
-    enabled: false
+    enabled: true
     port: http
     path: /metrics
 
@@ -272,7 +272,7 @@ cpService:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "162404b"
+    tag: "7b85118"
     pullPolicy: IfNotPresent
 
   resources:
@@ -341,7 +341,7 @@ cpWebserver:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "162404b"
+    tag: "7b85118"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -407,7 +407,7 @@ cpReconciler:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "162404b"
+    tag: "7b85118"
     pullPolicy: IfNotPresent
 
   resources:
@@ -447,6 +447,81 @@ cpReconciler:
       value: 'true'
     - name: RUN_REPORTER
       value: 'false'
+    - name: POSTGRES_CONNECTION
+      valueFrom:
+        secretKeyRef:
+          name: control-plane-connection
+          key: rw_uri
+    - name: POSTGRES_QUEUE_CONNECTION
+      valueFrom:
+        secretKeyRef:
+          name: control-plane-queue-connection
+          key: rw_uri
+
+cpMetricsWatcher:
+  logLevel: info
+
+  replicas: 1
+
+  podMonitor:
+    enabled: false
+    port: http
+    path: /metrics
+
+  externalSecrets:
+    refreshInterval: "5m"
+    parameterStore:
+      name: "secret-store-parameter-store"
+      kind: ClusterSecretStore
+    secretName: ~
+    secretRegex: ~
+
+  image:
+    repository: quay.io/coredb/cp-service
+    tag: "7b85118"
+    pullPolicy: IfNotPresent
+
+  resources:
+    limits:
+      cpu: 1
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  serviceAccount:
+    create: true
+    annotations: {}
+    # Defaults to match name of deployment,
+    # when this is set to empty string.
+    name: ""
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  imagePullSecrets: []
+  nameOverride: cp-metrics-watcher
+  fullnameOverride: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  env:
+    - name: SERVICE_NAME
+      value: cp-metrics-watcher
+    - name: RUN_RECONCILE
+      value: 'false'
+    - name: RUN_REPORTER
+      value: 'false'
+    - name: RUN_METRONOME_REPORTER
+      value: 'false'
+    - name: RUN_METRICS_WATCHER
+      value: 'true'
+    - name: MAX_CONN_POOL_SIZE
+      value: '10'
     - name: POSTGRES_CONNECTION
       valueFrom:
         secretKeyRef:
