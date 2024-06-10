@@ -4,6 +4,9 @@ metadata:
   name: {{ include "temboUI.fullname" . }}
   labels:
     {{- include "temboUI.labels" . | nindent 4 }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
   ingressClassName: traefik
   rules:
