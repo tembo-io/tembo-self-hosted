@@ -72,6 +72,15 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.cpWebserver.resources | nindent 12 }}
+          volumeMounts:
+            - name: pod-scheduling-volume
+              mountPath: /etc/pod-scheduling
+      volumes:
+        - name: pod-scheduling-volume
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want
+            # to add to the container
+            name: {{ include "cpWebserver.fullname" . }}-affinity
       {{- with .Values.cpWebserver.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
