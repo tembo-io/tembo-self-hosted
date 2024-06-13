@@ -78,8 +78,6 @@ spec:
       volumes:
         - name: pod-scheduling-volume
           configMap:
-            # Provide the name of the ConfigMap containing the files you want
-            # to add to the container
             name: {{ include "cpWebserver.fullname" . }}-affinity
       {{- with .Values.cpWebserver.nodeSelector }}
       nodeSelector:
