@@ -2,6 +2,13 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Set affinity, nodeSelector or tolerations for all Postgres pods. More information at
+# https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+postgresPodScheduling:
+  affinity: {}
+  nodeSelector: {}
+  tolerations: []
+
 conductor:
   logLevel: info
 
@@ -272,7 +279,7 @@ cpService:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "7b85118"
+    tag: "release-24.2.1"
     pullPolicy: IfNotPresent
 
   resources:
@@ -341,7 +348,7 @@ cpWebserver:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "7b85118"
+    tag: "release-24.2.1"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -407,7 +414,7 @@ cpReconciler:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "7b85118"
+    tag: "release-24.2.1"
     pullPolicy: IfNotPresent
 
   resources:
@@ -478,7 +485,7 @@ cpMetricsWatcher:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "7b85118"
+    tag: "release-24.2.1"
     pullPolicy: IfNotPresent
 
   resources:

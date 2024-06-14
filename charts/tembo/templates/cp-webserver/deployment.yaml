@@ -72,6 +72,13 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.cpWebserver.resources | nindent 12 }}
+          volumeMounts:
+            - name: pod-scheduling-volume
+              mountPath: /etc/pod-scheduling
+      volumes:
+        - name: pod-scheduling-volume
+          configMap:
+            name: {{ include "cpWebserver.fullname" . }}-affinity
       {{- with .Values.cpWebserver.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
