@@ -1,6 +1,6 @@
 global:
   temboEnabled: true
-  monitoringEnabled: false
+  monitoringEnabled: true
   conductorEnabled: false
   baseDomain: ~
 tembo:
