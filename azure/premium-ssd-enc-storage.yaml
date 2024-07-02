@@ -1,0 +1,14 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: premium-ssd-enc
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: disk.csi.azure.com
+allowVolumeExpansion: true
+parameters:
+  skuname: Premium_LRS
+  kind: Managed
+  fsType: ext4
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain

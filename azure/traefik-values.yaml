@@ -1,0 +1,100 @@
+image:
+  # Version 3 is in pre-release and has the feature we need
+  # To support the StartTLS part of the PostgreSQL protocol
+  tag: v3.0.0-beta2
+logs:
+  access:
+    enabled: true
+service:
+  type: LoadBalancer
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "false"
+resources:
+  # Will depend on how many connections our clients
+  # have, the transaction rate, and the reconnect
+  # frequency.
+  requests:
+    cpu: "0.5"
+    memory: "512Mi"
+  limits:
+    cpu: "1"
+    memory: "1000Mi"
+updateStrategy:
+  type: RollingUpdate
+  # This configuration allows for
+  # minimizing the number of times clients
+  # need to reconnect to only 1 time if we are
+  # updating the deployment.
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 100%
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 5
+  # If multiple metrics are specified in a HorizontalPodAutoscaler,
+  # this calculation is done for each metric, and then the largest of
+  # the desired replica counts is chosen.
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          # % of requests, number can
+          # exceed 100%
+          averageUtilization: 99
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          # % of requests, number can
+          # exceed 100%
+          averageUtilization: 60
+  behavior:
+    scaleDown:
+      # Maximium cooldown for scaling down
+      # is 1 hour
+      stabilizationWindowSeconds: 3600
+      policies:
+        - type: Percent
+          # This means allow for scaling down as many
+          # pods as we want in a single scale-down,
+          # above the minimium count.
+          # This is the default value.
+          value: 100
+          # This means how long the policy must hold true
+          # before scaling down.
+          periodSeconds: 900
+additionalArguments:
+  - "--entryPoints.postgresql.address=:5432/tcp"
+  # Require authentication for all HTTPS requests
+  - "--entrypoints.websecure.http.middlewares=traefik-forwardauth@kubernetescrd"
+  # Redirect from HTTP to HTTPS for all requests to HTTP port
+  - "--entrypoints.web.http.middlewares=traefik-https-redirect@kubernetescrd"
+  # Configure min TLS version
+  - "--entrypoints.websecure.http.tls.options=traefik-default@kubernetescrd"
+  - "--providers.file.filename=/config/postgres-catch-all.yaml"
+volumes:
+  - name: 'postgres-catch-all'
+    mountPath: "/config"
+    type: configMap
+ports:
+  postgresql:
+    expose: true
+    port: 5432
+    exposedPort: 5432
+    protocol: TCP
+deployment:
+  # These configurations allow for the NLB to drain connections
+  # An NLB can take up to 180 seconds to stop routing TCP connections
+  # to a target.
+  terminationGracePeriodSeconds: 200
+  lifecycle:
+    preStop:
+      exec:
+        command: ["/bin/sh", "-c", "sleep 180"]
