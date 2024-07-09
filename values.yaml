@@ -1,5 +1,6 @@
 global:
   temboEnabled: true
+  certManagerEnabled: false
   monitoringEnabled: false
   conductorEnabled: false
   baseDomain: ~
