@@ -57,6 +57,8 @@ spec:
             value: {{ .Values.cpWebserver.logLevel }}
           - name: DEFAULT_CONTAINER_REGISTRY
             value: quay.io/tembo
+          - name: SELF_HOSTED
+            value: 'true'
           {{- if .Values.cpWebserver.env }}{{ .Values.cpWebserver.env | default list | toYaml | nindent 10 }}{{- end }}
           securityContext:
             {{- toYaml .Values.cpWebserver.securityContext | nindent 12 }}
