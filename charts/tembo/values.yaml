@@ -650,4 +650,4 @@ temboUI:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  env: {}
+  env: []
