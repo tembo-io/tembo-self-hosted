@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-postgres-catch-all
+data:
+  postgres-catch-all.yaml: |
+    tcp:
+      routers:
+        catchAll:
+          entryPoints:
+            - "postgresql"
+          rule: "HostSNI(`*`)"
+          service: empty
+      services:
+        empty:
+          loadBalancer:
+            servers: {}
