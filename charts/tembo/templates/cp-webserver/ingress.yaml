@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "cpWebserver.labels" . | nindent 4 }}
 spec:
-  ingressClassName: traefik
+  ingressClassName: {{ include "cpWebserver.ingressClass" . }}
   rules:
     - host: api.{{ .Values.global.baseDomain }}
       http:

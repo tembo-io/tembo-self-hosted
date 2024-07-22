@@ -60,3 +60,14 @@ Create the name of the service account to use
 {{- default "default" .Values.temboUI.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Define IngressClass name
+*/}}
+{{- define "temboUI.ingressClass" -}}
+{{- if .Values.global.traefikEnabled }}
+{{- printf "%s-%s" .Release.Name "traefik" }}
+{{- else }}
+{{- "traefik" }}
+{{- end }}
+{{- end }}

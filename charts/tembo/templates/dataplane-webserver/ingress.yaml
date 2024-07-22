@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "dataplaneWebserver.labels" . | nindent 4 }}
 spec:
-  ingressClassName: traefik
+  ingressClassName: {{ include "dataplaneWebserver.ingressClass" . }}
   rules:
     - host: dataplane.{{ .Values.global.baseDomain }}
       http:
