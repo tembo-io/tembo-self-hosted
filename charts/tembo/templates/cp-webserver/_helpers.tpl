@@ -60,3 +60,14 @@ Create the name of the service account to use
 {{- default "default" .Values.cpWebserver.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Define IngressClass name
+*/}}
+{{- define "cpWebserver.ingressClass" -}}
+{{- if .Values.global.traefikEnabled }}
+{{- printf "%s-%s" .Release.Name "traefik" }}
+{{- else }}
+{{- "traefik" }}
+{{- end }}
+{{- end }}

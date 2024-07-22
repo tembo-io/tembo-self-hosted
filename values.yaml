@@ -2,7 +2,7 @@ global:
   temboEnabled: true
   monitoringEnabled: false
   conductorEnabled: false
-  traefikEnabled: false
+  traefikEnabled: true
   baseDomain: ~
 tembo:
   conductor:
