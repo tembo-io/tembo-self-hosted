@@ -39,6 +39,20 @@ spec:
           env:
           - name: RUST_LOG
             value: {{ .Values.temboUI.logLevel }}
+          - name: INTERCOM_SECRET
+            value: "placeholder-value"
+          - name: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+            value: "placeholder-value"
+          - name: ORB_SECRET_KEY
+            value: "placeholder-value"
+          - name: NEXT_PUBLIC_POSTHOG_KEY
+            value: "placeholder-value"
+          - name: NEXT_PUBLIC_POSTHOG_HOST
+            value: "placeholder-value"
+          - name: NEXT_PUBLIC_BILLING
+            value: "false"
+          - name: NEXT_PUBLIC_SPOT
+            value: "false"
           {{- if .Values.temboUI.env }}{{ .Values.temboUI.env | default list | toYaml | nindent 10 }}{{- end }}
           securityContext:
             {{- toYaml .Values.temboUI.securityContext | nindent 12 }}
