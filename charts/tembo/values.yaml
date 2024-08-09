@@ -560,7 +560,7 @@ dataplaneWebserver:
 
   image:
     repository: quay.io/tembo/dataplane-webserver
-    tag: "9644499"
+    tag: "e534b50"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -616,7 +616,7 @@ temboUI:
 
   image:
     repository: quay.io/tembo/mahout-ui
-    tag: aed9151
+    tag: 31b10a3
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
