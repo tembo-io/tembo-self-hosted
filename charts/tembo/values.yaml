@@ -33,7 +33,7 @@ conductor:
 
   image:
     repository: quay.io/tembo/conductor
-    tag: "9644499"
+    tag: "e534b50"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -86,7 +86,7 @@ tembo-operator:
       repository: quay.io/tembo/tembo-operator
       pullPolicy: Always
       # -- Overrides the image tag whose default is latest
-      tag: "9644499"
+      tag: "e534b50"
 
     crds:
       # -- Specifies whether the CRDs should be created when installing the chart.
@@ -182,7 +182,7 @@ tembo-operator:
       repository: quay.io/tembo/tembo-pod-init
       pullPolicy: IfNotPresent
       # -- Overrides the image tag whose default is latest
-      tag: "9644499"
+      tag: "e534b50"
 
     extraEnv: []
 
