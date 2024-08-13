@@ -48,7 +48,7 @@ spec:
               secretKeyRef:
                 name: control-plane-connection
                 key: rw_uri
-          - name: POSTGRES_QUEUE_CONNECTION
+          - name: QUEUE_CONNECTION_URI
             valueFrom:
               secretKeyRef:
                 name: control-plane-queue-connection
