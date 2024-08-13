@@ -8,7 +8,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
-  ingressClassName: traefik
+  ingressClassName: {{ include "temboUI.ingressClass" . }}
   rules:
     - host: app.{{ .Values.global.baseDomain }}
       http:

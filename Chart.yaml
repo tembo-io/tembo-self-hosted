@@ -12,3 +12,6 @@ dependencies:
   - name: monitoring
     condition: global.monitoringEnabled
     version: 24.2.0
+  - name: traefik
+    condition: global.traefikEnabled
+    version: 24.2.0

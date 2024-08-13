@@ -57,6 +57,8 @@ spec:
             value: {{ .Values.cpWebserver.logLevel }}
           - name: DEFAULT_CONTAINER_REGISTRY
             value: quay.io/tembo
+          - name: SELF_HOSTED
+            value: 'true'
           {{- if .Values.cpWebserver.env }}{{ .Values.cpWebserver.env | default list | toYaml | nindent 10 }}{{- end }}
           securityContext:
             {{- toYaml .Values.cpWebserver.securityContext | nindent 12 }}
@@ -72,6 +74,13 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.cpWebserver.resources | nindent 12 }}
+          volumeMounts:
+            - name: pod-scheduling-volume
+              mountPath: /etc/pod-scheduling
+      volumes:
+        - name: pod-scheduling-volume
+          configMap:
+            name: {{ include "cpWebserver.fullname" . }}-affinity
       {{- with .Values.cpWebserver.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
