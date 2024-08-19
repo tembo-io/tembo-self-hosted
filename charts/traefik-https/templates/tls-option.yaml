@@ -1,0 +1,10 @@
+{{ if .Values.certificate.enabled }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: TLSOption
+metadata:
+  name: default
+  namespace: {{ .Release.Namespace }}
+spec:
+  minVersion: VersionTLS12
+{{ end }}

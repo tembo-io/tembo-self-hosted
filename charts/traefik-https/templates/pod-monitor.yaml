@@ -1,0 +1,18 @@
+{{- if .Values.podMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: traefik
+  namespace: {{ .Release.Namespace }}
+spec:
+  podMetricsEndpoints:
+  - path: /metrics
+    port: metrics
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: traefik-{{ .Release.Namespace }}
+      app.kubernetes.io/name: traefik
+{{- end }}

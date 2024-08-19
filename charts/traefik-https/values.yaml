@@ -1,0 +1,20 @@
+podMonitor:
+  enabled: false
+albIngress:
+  enabled: false
+  groupName: default
+  public: false
+  hosts: []
+certificate:
+  enabled: false
+  organization: ~
+  commonName: ~
+  subjectAltNames: ~
+  issuer:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+middleware:
+  forwardAuth:
+    enabled: false
+    # Address of the auth server
+    address: ~

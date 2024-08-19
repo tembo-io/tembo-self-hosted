@@ -1,0 +1,41 @@
+{{- if .Values.postgresCA.enabled }}
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigning-postgres-ca-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-selfsigned-ca
+  namespace: cert-manager
+spec:
+  commonName: {{ .Values.postgresCA.commonName }}
+  dnsNames:
+{{ toYaml .Values.postgresCA.dnsNames | indent 4 }}
+  isCA: true
+  subject:
+    organizations:
+      - tembo
+    organizationalUnits:
+      - engineering
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: selfsigning-postgres-ca-issuer
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  secretName: postgres-ca-secret
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: postgres-server-issuer
+spec:
+  ca:
+    secretName: postgres-ca-secret
+{{- end }}

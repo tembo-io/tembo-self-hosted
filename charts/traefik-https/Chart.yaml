@@ -1,0 +1,6 @@
+apiVersion: v2
+name: traefik-https
+description: Enable HTTPS on Traefik
+type: application
+version: "0.0.1"
+appVersion: "0.0.1"

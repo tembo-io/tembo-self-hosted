@@ -1,0 +1,32 @@
+{{ if .Values.certificate.enabled }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-redirect
+  namespace: {{ .Release.Namespace }}
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+{{ end }}
+{{ if .Values.middleware.forwardAuth.enabled }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: forwardauth
+  namespace: {{ .Release.Namespace }}
+spec:
+  forwardAuth:
+    address: {{ .Values.middleware.forwardAuth.address }}
+    authRequestHeaders:
+      - "Authorization"
+      - "X-Scope-OrgID"
+    authResponseHeaders:
+      - "X-Tembo-Org"
+      - "X-Tembo-Instance"
+    tls:
+      insecureSkipVerify: false
+
+{{ end }}

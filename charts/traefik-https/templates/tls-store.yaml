@@ -1,0 +1,13 @@
+{{ if .Values.certificate.enabled }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: TLSStore
+metadata:
+  # this must be named 'default'
+  # https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/#kind-tlsstore
+  name: default
+  namespace: {{ .Release.Namespace }}
+spec:
+  defaultCertificate:
+    secretName: traefik-cert
+{{ end }}

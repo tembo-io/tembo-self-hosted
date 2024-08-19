@@ -1,0 +1,38 @@
+{{ if .Values.albIngress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: traefik-alb
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    alb.ingress.kubernetes.io/group.name: {{ .Values.albIngress.groupName }}
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /ping
+    alb.ingress.kubernetes.io/healthcheck-port: "9000"
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    {{- if .Values.albIngress.public }}
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    {{- else }}
+    alb.ingress.kubernetes.io/scheme: internal
+    {{- end }}
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/target-type: ip
+    # Setting as an annotation instead of in the spec
+    # is compatible with External DNS.
+    kubernetes.io/ingress.class: alb
+spec:
+  rules:
+    {{- range .Values.albIngress.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  number: 80
+    {{- end }}
+{{ end }}
