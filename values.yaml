@@ -20,7 +20,7 @@ tembo:
       - name: CONTROL_PLANE_EVENTS_QUEUE
         value: "control_plane_aws_data_1_use1"
       - name: DATA_PLANE_EVENTS_QUEUE
-        value: "data_plane_events"
+        value: "conductor_aws_data_1_use1"
       - name: DATA_PLANE_BASEDOMAIN
         value: ~
       - name: BACKUP_ARCHIVE_BUCKET
@@ -28,7 +28,7 @@ tembo:
       - name: CF_TEMPLATE_BUCKET
         value: "tembo-cf-templates"
       - name: METRICS_EVENTS_QUEUE
-        value: "metrics_events"
+        value: "metrics_aws_data_1_use1"
       - name: IS_CLOUD_FORMATION
         value: "false"
       - name: STORAGE_ARCHIVE_BUCKET
