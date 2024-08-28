@@ -18,7 +18,7 @@ tembo:
             name: control-plane-queue-connection
             key: rw_uri
       - name: CONTROL_PLANE_EVENTS_QUEUE
-        value: "saas_queue"
+        value: "control_plane_aws_data_1_use1"
       - name: DATA_PLANE_EVENTS_QUEUE
         value: "data_plane_events"
       - name: DATA_PLANE_BASEDOMAIN
@@ -33,6 +33,8 @@ tembo:
         value: "false"
       - name: STORAGE_ARCHIVE_BUCKET
         value: "tembo-storage"
+      - name: PROMETHEUS_URL
+        value: "http://prometheus-kube-prometheus-stack.kube-prometheus-stack.svc.cluster.local"
   tembo-operator:
     controller:
       monitoring:
