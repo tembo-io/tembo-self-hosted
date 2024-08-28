@@ -53,6 +53,11 @@ spec:
               secretKeyRef:
                 name: control-plane-queue-connection
                 key: rw_uri
+          - name: POSTGRES_RAG_CONNECTION
+            valueFrom:
+              secretKeyRef:
+                name: control-plane-connection
+                key: rw_uri
           - name: RUST_LOG
             value: {{ .Values.cpWebserver.logLevel }}
           - name: DEFAULT_CONTAINER_REGISTRY
