@@ -34,7 +34,7 @@ tembo:
       - name: STORAGE_ARCHIVE_BUCKET
         value: "tembo-storage"
       - name: PROMETHEUS_URL
-        value: "http://prometheus-kube-prometheus-stack.kube-prometheus-stack.svc.cluster.local"
+        value: "http://tembo-kube-prometheus-stac-prometheus.tembo.svc.cluster.local:9090"
   tembo-operator:
     controller:
       monitoring:
