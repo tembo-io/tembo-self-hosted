@@ -33,7 +33,7 @@ conductor:
 
   image:
     repository: quay.io/tembo/conductor
-    tag: "9644499"
+    tag: "2295805"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -86,7 +86,7 @@ tembo-operator:
       repository: quay.io/tembo/tembo-operator
       pullPolicy: Always
       # -- Overrides the image tag whose default is latest
-      tag: "9644499"
+      tag: "2295805"
 
     crds:
       # -- Specifies whether the CRDs should be created when installing the chart.
@@ -182,7 +182,7 @@ tembo-operator:
       repository: quay.io/tembo/tembo-pod-init
       pullPolicy: IfNotPresent
       # -- Overrides the image tag whose default is latest
-      tag: "9644499"
+      tag: "2295805"
 
     extraEnv: []
 
@@ -279,7 +279,7 @@ cpService:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "release-24.2.1"
+    tag: "5500bf0"
     pullPolicy: IfNotPresent
 
   resources:
@@ -322,7 +322,7 @@ cpService:
         secretKeyRef:
           name: control-plane-connection
           key: rw_uri
-    - name: POSTGRES_QUEUE_CONNECTION
+    - name: QUEUE_CONNECTION_URI
       valueFrom:
         secretKeyRef:
           name: control-plane-queue-connection
@@ -348,7 +348,7 @@ cpWebserver:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "release-24.2.1"
+    tag: "5500bf0"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -414,7 +414,7 @@ cpReconciler:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "release-24.2.1"
+    tag: "5500bf0"
     pullPolicy: IfNotPresent
 
   resources:
@@ -459,7 +459,7 @@ cpReconciler:
         secretKeyRef:
           name: control-plane-connection
           key: rw_uri
-    - name: POSTGRES_QUEUE_CONNECTION
+    - name: QUEUE_CONNECTION_URI
       valueFrom:
         secretKeyRef:
           name: control-plane-queue-connection
@@ -485,7 +485,7 @@ cpMetricsWatcher:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "release-24.2.1"
+    tag: "5500bf0"
     pullPolicy: IfNotPresent
 
   resources:
@@ -534,7 +534,7 @@ cpMetricsWatcher:
         secretKeyRef:
           name: control-plane-connection
           key: rw_uri
-    - name: POSTGRES_QUEUE_CONNECTION
+    - name: QUEUE_CONNECTION_URI
       valueFrom:
         secretKeyRef:
           name: control-plane-queue-connection
@@ -560,7 +560,7 @@ dataplaneWebserver:
 
   image:
     repository: quay.io/tembo/dataplane-webserver
-    tag: "9644499"
+    tag: "2295805"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -616,7 +616,7 @@ temboUI:
 
   image:
     repository: quay.io/tembo/mahout-ui
-    tag: aed9151
+    tag: 19ef577
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults

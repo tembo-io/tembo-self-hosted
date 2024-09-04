@@ -18,9 +18,9 @@ tembo:
             name: control-plane-queue-connection
             key: rw_uri
       - name: CONTROL_PLANE_EVENTS_QUEUE
-        value: "saas_queue"
+        value: "control_plane_aws_data_1_use1"
       - name: DATA_PLANE_EVENTS_QUEUE
-        value: "data_plane_events"
+        value: "conductor_aws_data_1_use1"
       - name: DATA_PLANE_BASEDOMAIN
         value: ~
       - name: BACKUP_ARCHIVE_BUCKET
@@ -28,9 +28,15 @@ tembo:
       - name: CF_TEMPLATE_BUCKET
         value: "tembo-cf-templates"
       - name: METRICS_EVENTS_QUEUE
-        value: "metrics_events"
+        value: "metrics_aws_data_1_use1"
       - name: IS_CLOUD_FORMATION
         value: "false"
+      - name: STORAGE_ARCHIVE_BUCKET
+        value: "tembo-storage"
+      - name: PROMETHEUS_URL
+        value: "http://tembo-kube-prometheus-stac-prometheus.tembo.svc.cluster.local:9090/api/v1/query"
+      - name: LOKI_URL
+        value: "http://loki-gateway.tembo.svc.cluster.local/loki/api/v1/query"
   tembo-operator:
     controller:
       monitoring:
