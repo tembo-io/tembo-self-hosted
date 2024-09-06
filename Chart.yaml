@@ -1,6 +1,6 @@
 apiVersion: v2
 name: tembo
-version: 24.2.0
+version: 24.3.0
 appVersion: 1.0.0
 description: Helm chart to deploy the Tembo Platform
 keywords:
@@ -8,10 +8,10 @@ keywords:
 dependencies:
   - name: tembo
     condition: global.temboEnabled
-    version: 24.2.0
+    version: 24.3.0
   - name: monitoring
     condition: global.monitoringEnabled
-    version: 24.2.0
+    version: 24.3.0
   - name: traefik
     condition: global.traefikEnabled
-    version: 24.2.0
+    version: 24.3.0
