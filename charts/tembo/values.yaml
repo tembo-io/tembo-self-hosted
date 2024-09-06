@@ -279,7 +279,7 @@ cpService:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "5500bf0"
+    tag: "release-24.3.0"
     pullPolicy: IfNotPresent
 
   resources:
@@ -348,7 +348,7 @@ cpWebserver:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "5500bf0"
+    tag: "release-24.3.0"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -414,7 +414,7 @@ cpReconciler:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "5500bf0"
+    tag: "release-24.3.0"
     pullPolicy: IfNotPresent
 
   resources:
@@ -485,7 +485,7 @@ cpMetricsWatcher:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "5500bf0"
+    tag: "release-24.3.0"
     pullPolicy: IfNotPresent
 
   resources:
