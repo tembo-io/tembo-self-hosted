@@ -36,9 +36,13 @@ eksctl create iamserviceaccount \
 
 SERVICE_ACCOUNT_ROLE_ARN="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${IAM_ROLE_NAME}"
 
+## Add the Amazon EBS CSI driver add-on
 eksctl create addon \
      --name aws-ebs-csi-driver \
      --cluster $CLUSTER_NAME \
      --service-account-role-arn $SERVICE_ACCOUNT_ROLE_ARN \
      --region $REGION \
      --force
+
+## Update the StorageClass to allow for volume expansion
+kubectl patch storageclass gp2 -p '{"allowVolumeExpansion": true}'

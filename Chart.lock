@@ -1,4 +1,7 @@
 dependencies:
+- name: cert-manager
+  repository: ""
+  version: 1.14.4
 - name: tembo
   repository: ""
   version: 24.3.0
@@ -8,5 +11,5 @@ dependencies:
 - name: traefik
   repository: ""
   version: 24.3.0
-digest: sha256:6e75eb1a403a9647901af2c92aa3718bafddfe914bfd44649e759e14a217f72f
-generated: "2024-09-06T10:45:01.847620299-04:00"
+digest: sha256:e2ebd0a5dfb53a18cb9024935983b7990298aff135284e2ed03148207e1a7a5c
+generated: "2024-09-09T16:26:01.138075-04:00"
