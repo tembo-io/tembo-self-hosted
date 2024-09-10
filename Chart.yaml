@@ -6,6 +6,9 @@ description: Helm chart to deploy the Tembo Platform
 keywords:
   - tembo
 dependencies:
+  - name: cert-manager
+    version: 1.14.4
+    condition: global.certManagerEnabled
   - name: tembo
     condition: global.temboEnabled
     version: 24.3.0
