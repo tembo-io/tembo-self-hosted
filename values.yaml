@@ -22,8 +22,6 @@ tembo:
         value: "control_plane_aws_data_1_use1"
       - name: DATA_PLANE_EVENTS_QUEUE
         value: "conductor_aws_data_1_use1"
-      - name: DATA_PLANE_BASEDOMAIN
-        value: ~
       - name: BACKUP_ARCHIVE_BUCKET
         value: "tembo-backups"
       - name: CF_TEMPLATE_BUCKET
@@ -47,9 +45,6 @@ tembo:
           enabled: true
           port: http
           path: /metrics
-      extraEnv:
-        - name: DATA_PLANE_BASEDOMAIN
-          value: ~
     cloudnative-pg:
       monitoring:
         podMonitorEnabled: true
