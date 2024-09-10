@@ -1,6 +1,6 @@
 apiVersion: v2
 name: tembo
-version: 24.3.0
+version: 24.3.1
 description: A Helm chart to deploy the Tembo platform
 keywords:
   - tembo
@@ -9,6 +9,6 @@ dependencies:
       version: 0.7.1
       repository: https://tembo-io.github.io/tembo
     - name: conductor
-      version: 0.5.2
+      version: 0.6.0
       condition: global.conductorEnabled
       repository: https://tembo-io.github.io/tembo
