@@ -10,5 +10,4 @@ dependencies:
       repository: https://tembo-io.github.io/tembo
     - name: conductor
       version: 0.6.0
-      condition: global.conductorEnabled
       repository: https://tembo-io.github.io/tembo
