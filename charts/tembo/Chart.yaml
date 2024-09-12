@@ -6,7 +6,7 @@ keywords:
   - tembo
 dependencies:
     - name: tembo-operator
-      version: 0.7.1
+      version: 0.7.2
       repository: https://tembo-io.github.io/tembo
     - name: conductor
       version: 0.6.0
