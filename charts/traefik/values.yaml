@@ -475,12 +475,12 @@ traefik:
   additionalArguments:
     - "--entryPoints.postgresql.address=:5432/tcp"
     # Require authentication for all HTTPS requests
-    - "--entrypoints.websecure.http.middlewares=traefik-forwardauth@kubernetescrd"
+    # - "--entrypoints.websecure.http.middlewares=traefik-forwardauth@kubernetescrd"
     # Redirect from HTTP to HTTPS for all requests to HTTP port
     # TODO Uncomment this when we have a valid certificate
-    # - "--entrypoints.web.http.middlewares=traefik-https-redirect@kubernetescrd"
+    - "--entrypoints.web.http.middlewares=traefik-https-redirect@kubernetescrd"
     # Configure min TLS version
-    - "--entrypoints.websecure.http.tls.options=traefik-default@kubernetescrd"
+    # - "--entrypoints.websecure.http.tls.options=traefik-default@kubernetescrd"
     - "--providers.file.filename=/config/postgres-catch-all.yaml"
 
   # Environment variables to be passed to Traefik's binary
