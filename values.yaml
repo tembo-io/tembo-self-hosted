@@ -65,42 +65,6 @@ tembo:
         value: ~
       - name: METRONOME_SECRET_KEY
         value: ~
-  cert-manager-issuer:
-    letsEncrypt:
-      enabled: true
-      solvers: []
-
-    selfsigned_installed: true
-
-    selfsigned_secretname: ca-key-pair
-
-    support_email_template: 'aws@example.com'
-
-    postgresCA:
-      enabled: false
-      dnsNames: []
-      commonName: ~
-  traefik-https:
-    podMonitor:
-      enabled: false
-    albIngress:
-      enabled: false
-      groupName: default
-      public: false
-      hosts: []
-    certificate:
-      enabled: false
-      organization: ~
-      commonName: ~
-      subjectAltNames: ~
-      issuer:
-        name: letsencrypt-prod
-        kind: ClusterIssuer
-    middleware:
-      forwardAuth:
-        enabled: false
-        # Address of the auth server
-        address: ~
 monitoring:
   kube-prometheus-stack:
     alertmanager:
