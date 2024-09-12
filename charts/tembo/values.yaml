@@ -33,7 +33,7 @@ conductor:
 
   image:
     repository: quay.io/tembo/conductor
-    tag: "2295805"
+    tag: "0332295"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
