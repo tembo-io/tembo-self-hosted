@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-catch-all
+  name: postgres-catchall
 data:
   postgres-catch-all.yaml: |
     tcp:
