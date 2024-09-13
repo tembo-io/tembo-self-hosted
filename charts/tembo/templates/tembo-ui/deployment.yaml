@@ -53,6 +53,8 @@ spec:
             value: "false"
           - name: NEXT_PUBLIC_SPOT
             value: "false"
+          {{- include "temboUI.apiBaseUrl" . | nindent 10 }}
+          {{- include "temboUI.metricsBaseUrl" . | nindent 10}}
           {{- if .Values.temboUI.env }}{{ .Values.temboUI.env | default list | toYaml | nindent 10 }}{{- end }}
           securityContext:
             {{- toYaml .Values.temboUI.securityContext | nindent 12 }}

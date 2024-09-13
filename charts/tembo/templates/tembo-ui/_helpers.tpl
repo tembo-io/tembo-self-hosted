@@ -71,3 +71,29 @@ Define IngressClass name
 {{- "traefik" }}
 {{- end }}
 {{- end }}
+
+{{/*
+Define API Base URL
+*/}}
+{{- define "temboUI.apiBaseUrl" -}}
+{{- if .Values.global.tlsEnabled }}
+- name: NEXT_PUBLIC_API_BASE_URL_V1
+  value: {{- printf " https://api.%s/api/v1" .Values.global.baseDomain }}
+{{- else }}
+- name: NEXT_PUBLIC_API_BASE_URL_V1
+  value: {{- printf " http://api.%s/api/v1" .Values.global.baseDomain }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define Metrics Base URL
+*/}}
+{{- define "temboUI.metricsBaseUrl" -}}
+{{- if .Values.global.tlsEnabled }}
+- name: NEXT_PUBLIC_METRICS_BASE_URL
+  value: {{- printf " https://dataplane.%s" .Values.global.baseDomain }}
+{{- else }}
+- name: NEXT_PUBLIC_METRICS_BASE_URL
+  value: {{- printf " http://dataplane.%s" .Values.global.baseDomain }}
+{{- end }}
+{{- end }}
