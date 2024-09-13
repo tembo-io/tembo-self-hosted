@@ -1,5 +1,6 @@
 global:
   certManagerEnabled: true
+  tlsEnabled: true
   temboEnabled: true
   monitoringEnabled: true
   traefikEnabled: true

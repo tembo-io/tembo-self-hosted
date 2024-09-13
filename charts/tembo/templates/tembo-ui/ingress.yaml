@@ -4,9 +4,11 @@ metadata:
   name: {{ include "temboUI.fullname" . }}
   labels:
     {{- include "temboUI.labels" . | nindent 4 }}
+  {{ if .Values.global.tlsEnabled }}
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
+  {{ end }}
 spec:
   ingressClassName: {{ include "temboUI.ingressClass" . }}
   rules:
@@ -20,7 +22,9 @@ spec:
                   number: 3000
             path: /
             pathType: Prefix
+  {{ if .Values.global.tlsEnabled }}
   tls:
   - hosts:
     - api.{{ .Values.global.baseDomain }}
     secretName: traefik-cert
+  {{ end }}
