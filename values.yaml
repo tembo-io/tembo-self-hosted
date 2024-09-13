@@ -2,7 +2,6 @@ global:
   certManagerEnabled: true
   temboEnabled: true
   monitoringEnabled: true
-  conductorEnabled: false
   traefikEnabled: true
   baseDomain: ~
 tembo:
