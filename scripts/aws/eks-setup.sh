@@ -46,3 +46,5 @@ eksctl create addon \
 
 ## Update the StorageClass to allow for volume expansion
 kubectl patch storageclass gp2 -p '{"allowVolumeExpansion": true}'
+
+kubectl get namespace | grep -q cert-manager || kubectl create namespace cert-manager
