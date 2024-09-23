@@ -1,9 +1,9 @@
 dependencies:
 - name: tembo-operator
   repository: https://tembo-io.github.io/tembo
-  version: 0.7.2
+  version: 0.7.3
 - name: conductor
   repository: https://tembo-io.github.io/tembo
   version: 0.6.0
-digest: sha256:e90e56761f6a5db38349a52b7f9d79976863fa251198d84a4738f324419e1fbd
-generated: "2024-09-12T12:01:28.949260794-04:00"
+digest: sha256:6257ad4310a8370f2f5358a7246de1567deb43a38dc81ef2f0ee3b0983efe17a
+generated: "2024-09-23T17:25:24.382155494-04:00"
