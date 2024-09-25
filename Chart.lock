@@ -4,12 +4,12 @@ dependencies:
   version: 1.14.4
 - name: tembo
   repository: ""
-  version: 24.3.2
+  version: 24.3.3
 - name: monitoring
   repository: ""
-  version: 24.3.2
+  version: 24.3.3
 - name: traefik
   repository: ""
-  version: 24.3.2
-digest: sha256:2e92187b6df09e78bdaf7929a6066bec56b6ba65985353693c39654f779dd41a
-generated: "2024-09-16T11:26:25.180352352-04:00"
+  version: 24.3.3
+digest: sha256:1c3e0b7b0c60a5c8bc5d93f9eac59f59a9847a72fecfb0552b08cd364ef7bec2
+generated: "2024-09-25T13:49:43.573315695-04:00"
