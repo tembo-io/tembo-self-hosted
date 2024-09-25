@@ -38,6 +38,11 @@ tembo:
         value: "http://loki-gateway.tembo.svc.cluster.local/loki/api/v1/query"
   tembo-operator:
     controller:
+      env:
+        - name: ENABLE_BACKUP
+          value: "true"
+        - name: ENABLE_VOLUME_SNAPSHOT
+          value: "false"
       monitoring:
         prometheusRule:
           enabled: true

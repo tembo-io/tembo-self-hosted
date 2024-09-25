@@ -6,12 +6,12 @@ keywords:
   - tembo
 dependencies:
     - name: tembo-operator
-      version: 0.7.3
-      repository: https://tembo-io.github.io/tembo
+      version: 0.8.0
+      repository: file://../../../tembo/charts/tembo-operator
     - name: conductor
       version: 0.6.0
       repository: https://tembo-io.github.io/tembo
-    - name: traefik-https
-      version: 0.0.1
-    - name: cert-manager-issuer
-      version: 0.1.0
+#    - name: file://traefik-https-0.0.1.tgz
+#      version: 0.0.1
+#    - name: cert-manager-issuer
+#      version: 0.1.0
