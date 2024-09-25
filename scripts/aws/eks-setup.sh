@@ -13,7 +13,7 @@ prompt_with_default() {
     echo "${user_input:-$default_value}"
 }
 
-CLUSTER_NAME=$(prompt_with_default "Enter cluster name" "")
+CLUSTER_NAME=$(kubectl config current-context | awk -F'/' '{print $NF}')
 REGION=$(prompt_with_default "Enter AWS region" "us-east-1")
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 
