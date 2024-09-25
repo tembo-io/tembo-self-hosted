@@ -15,7 +15,7 @@ prompt_with_default() {
 
 CLUSTER_NAME=$(prompt_with_default "Enter cluster name" "")
 REGION=$(prompt_with_default "Enter AWS region" "us-east-1")
-AWS_ACCOUNT_ID=$(prompt_with_default "AWS account ID" "")
+AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 
 ## Enable IAM OIDC Provider
 eksctl utils associate-iam-oidc-provider --cluster $CLUSTER_NAME --region $REGION --approve
