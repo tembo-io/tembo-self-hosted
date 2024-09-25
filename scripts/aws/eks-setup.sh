@@ -13,9 +13,9 @@ prompt_with_default() {
     echo "${user_input:-$default_value}"
 }
 
-CLUSTER_NAME=$(prompt_with_default "Enter cluster name" "")
-REGION=$(prompt_with_default "Enter AWS region" "us-east-1")
-AWS_ACCOUNT_ID=$(prompt_with_default "AWS account ID" "")
+CLUSTER_NAME=$(kubectl config current-context | awk -F'/' '{print $NF}')
+REGION=$(kubectl config current-context | awk -F':' '{print $4}')
+AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 
 ## Enable IAM OIDC Provider
 eksctl utils associate-iam-oidc-provider --cluster $CLUSTER_NAME --region $REGION --approve
