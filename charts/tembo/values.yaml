@@ -33,7 +33,7 @@ conductor:
 
   image:
     repository: quay.io/tembo/conductor
-    tag: "37b24a4"
+    tag: "e951ce9"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -86,7 +86,7 @@ tembo-operator:
       repository: quay.io/tembo/tembo-operator
       pullPolicy: Always
       # -- Overrides the image tag whose default is latest
-      tag: "37b24a4"
+      tag: "ddf0481"
 
     crds:
       # -- Specifies whether the CRDs should be created when installing the chart.
@@ -182,7 +182,7 @@ tembo-operator:
       repository: quay.io/tembo/tembo-pod-init
       pullPolicy: IfNotPresent
       # -- Overrides the image tag whose default is latest
-      tag: "37b24a4"
+      tag: "ddf0481"
 
     extraEnv: []
 
@@ -279,7 +279,7 @@ cpService:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "980f5a0"
+    tag: "3803a33"
     pullPolicy: IfNotPresent
 
   resources:
@@ -348,7 +348,7 @@ cpWebserver:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "980f5a0"
+    tag: "3803a33"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -414,7 +414,7 @@ cpReconciler:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "980f5a0"
+    tag: "3803a33"
     pullPolicy: IfNotPresent
 
   resources:
@@ -485,7 +485,7 @@ cpMetricsWatcher:
 
   image:
     repository: quay.io/coredb/cp-service
-    tag: "980f5a0"
+    tag: "3803a33"
     pullPolicy: IfNotPresent
 
   resources:
@@ -560,7 +560,7 @@ dataplaneWebserver:
 
   image:
     repository: quay.io/tembo/dataplane-webserver
-    tag: "37b24a4"
+    tag: "e951ce9"
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
@@ -616,7 +616,7 @@ temboUI:
 
   image:
     repository: quay.io/tembo/mahout-ui
-    tag: 5983a5f
+    tag: b5d8d8b
     pullPolicy: IfNotPresent
 
   # We should reconfigure the defaults
