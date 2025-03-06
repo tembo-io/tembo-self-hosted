@@ -1,7 +1,7 @@
 apiVersion: v2
 name: traefik
 description: A Helm chart for the traefik ingress controller
-version: 25.3.0
+version: 25.3.1
 dependencies:
   - name: traefik
     version: 29.0.1
