@@ -5,6 +5,6 @@ metadata:
   name: custom-s3-creds
 type: Opaque
 data:
-  ACCESS_KEY_ID: {{ .Values.jobs.customS3Backup.accessKeyId }}
-  SECRET_ACCESS_KEY: {{ .Values.jobs.customS3Backup.secretAccessKey }}
+  ACCESS_KEY_ID: {{ .Values.jobs.customS3Backup.accessKeyId | b64enc | quote }}
+  SECRET_ACCESS_KEY: {{ .Values.jobs.customS3Backup.secretAccessKey | b64enc | quote }}
 {{- end }}
