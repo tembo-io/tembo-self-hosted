@@ -56,6 +56,11 @@ tembo:
         value: ~
       - name: METRONOME_SECRET_KEY
         value: ~
+  jobs:
+    customS3Backup:
+      enabled: false
+      accessKeyId: ~
+      secretAccessKey: ~
 monitoring:
   kube-prometheus-stack:
     alertmanager:
