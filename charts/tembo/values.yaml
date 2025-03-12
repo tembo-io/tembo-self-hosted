@@ -688,3 +688,10 @@ traefik-https:
       enabled: false
       # Address of the auth server
       address: ~
+
+jobs:
+  customS3Backup:
+    enabled: false
+    accessKeyId: ~
+    secretAccessKey: ~
+

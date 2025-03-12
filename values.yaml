@@ -32,10 +32,6 @@ tembo:
         value: "false"
       - name: STORAGE_ARCHIVE_BUCKET
         value: "tembo-storage"
-      - name: PROMETHEUS_URL
-        value: "http://tembo-kube-prometheus-stac-prometheus.tembo-system.svc.cluster.local:9090/api/v1/query"
-      - name: LOKI_URL
-        value: "http://loki-gateway.tembo-system.svc.cluster.local/loki/api/v1/query"
   tembo-operator:
     controller:
       monitoring:
