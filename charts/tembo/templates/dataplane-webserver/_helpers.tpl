@@ -69,13 +69,6 @@ Prometheus Service Prefix
 {{- end }}
 
 {{/*
-Prometheus URL
-*/}}
-{{- define "dataplaneWebserver.prometheusUrl" -}}
-{{- printf "http://%s-prometheus.%s.svc.cluster.local:9090" (include "dataplaneWebserver.prometheusServicePrefix" .) .Release.Namespace }}
-{{- end }}
-
-{{/*
 Define IngressClass name
 */}}
 {{- define "dataplaneWebserver.ingressClass" -}}
