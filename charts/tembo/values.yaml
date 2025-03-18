@@ -594,7 +594,7 @@ dataplaneWebserver:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  env: {}
+  env: []
 
 temboUI:
   logLevel: info
