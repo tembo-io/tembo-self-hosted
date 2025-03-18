@@ -69,6 +69,17 @@ Prometheus Service Prefix
 {{- end }}
 
 {{/*
+Prometheus URL
+*/}}
+{{- define "dataplaneWebserver.prometheusUrl" -}}
+{{- $prometheusUrl := .Values.prometheusUrl | default .Values.dataplaneWebserver.prometheusUrl }}
+{{- if not $prometheusUrl -}}
+  {{- fail "The Prometheus URL must be defined either in values.yaml or via --set." }}
+{{- end }}
+{{- $prometheusUrl }}
+{{- end }}
+
+{{/*
 Define IngressClass name
 */}}
 {{- define "dataplaneWebserver.ingressClass" -}}
