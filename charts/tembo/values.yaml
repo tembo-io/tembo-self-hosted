@@ -693,4 +693,8 @@ jobs:
     enabled: false
     accessKeyId: ~
     secretAccessKey: ~
-
+  lokiConfig:
+    namespace: ~
+    routesMatch: ~
+    servicesName: ~
+    accessControlAllowOrigin: []

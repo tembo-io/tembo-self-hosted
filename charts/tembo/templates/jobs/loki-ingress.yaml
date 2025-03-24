@@ -1,0 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: loki-monitoring
+  namespace: {{ .Values.jobs.lokiConfig.namespace }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: {{ .Values.jobs.lokiConfig.routesMatch }}
+      middlewares:
+        - name: monitoring-cors-monitoring
+      services:
+        - name: {{ .Values.jobs.lokiConfig.servicesName }}
+          port: 3100
+  tls: {}
